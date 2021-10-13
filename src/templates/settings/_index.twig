@@ -1,0 +1,77 @@
+{% extends "_layouts/cp" %}
+{% set title = 'Welcome to OnePlugin Fields!' %}
+{% set crumbs = [
+    { label: "OnePlugin Fields", url: url('onepluginfields') },
+    { label: "Welcome"|t, url: url('onepluginfields?welcome=1') },
+] %}
+{% block content %}
+<div class="pane" style="">
+    <img src="" alt="" width="120" style="float:left; margin:12px;">
+    <div style="padding-left: 160px">
+        <h2>You’re the best and you’re about to plug amazing into your life!</h2>
+        <p>OnePlugin allows you to dynamically switch content types and provides you with access to editable assets that work with you. With one line of code and just three clicks you’re site will come to life. 
+            <p>We hope you love it! Would you like to know more? <a target="_blank" href="http://docs.oneplugin.co">Please see the documentation.</a></p>
+        <p>Brought to you by the OnePlugin team</p>            
+    </div>
+</div>
+
+<hr>
+{% endblock %}
+
+{% block actionButton %}
+    <div class="buttons">
+        <div class="btngroup submit">
+            <input type="submit" class="btn submit" value="{{ 'Save'|t('one-plugin-fields') }}">
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{% extends 'image-optimize/_layouts/imageoptimize-cp.twig' %}
+
+{% set title = 'Welcome to ImageOptimize!' %}
+
+{% set linkGetStarted = url('settings/plugins/image-optimize') %}
+{% set docsUrl = "https://github.com/nystudio107/craft-imageoptimize/blob/v1/README.md" %}
+
+{% do view.registerAssetBundle("nystudio107\\imageoptimize\\assetbundles\\imageoptimize\\ImageOptimizeAsset") %}
+{% set baseAssetsUrl = view.getAssetManager().getPublishedUrl('@nystudio107/imageoptimize/assetbundles/imageoptimize/dist', true) %}
+
+{% set crumbs = [
+    { label: "ImageOptimize", url: url('image-optimize') },
+    { label: "Welcome"|t, url: url('image-optimize/welcome') },
+] %}
+
+{% block content %}
+    <div id="cp-nav-content" class="readable" style="text-align:center; margin:0 auto; padding: 5% 10%;">
+        <confetti>
+        </confetti>
+        <img src="{{ baseAssetsUrl ~ '/img/ImageOptimize-icon.svg' }}" width="30%" height="auto" />
+        <h2>Thanks for using ImageOptimize!</h2>
+        <p>ImageOptimize allows you to automatically create & optimize responsive image transforms from your Craft CMS assets.</p>
+        <p>It works equally well with native Craft image transforms, and image services like <a href="https://imgix.com" target="_blank" rel="noopener">imgix</a>, with zero template changes.</p>
+
+        <p>We hope you love it! For more information, please <a href="{{ docsUrl }}" target="_blank" rel="noopener">see the documentation</a>.</p>
+        <p>
+            &nbsp;
+        </p>
+        <p>
+            <a href="{{ linkGetStarted }}"><button class="btn submit">Get Started</button></a>
+        </p>
+    </div>
+    <div style="text-align:center; margin:0 auto; padding: 0;">
+        <p class="instructions">
+            Brought to you by <a href="http://nystudio107.com" target="_blank" rel="noopener">nystudio107</a>
+        </p>
+    </div>
+{% endblock %}
+
+{% block foot %}
+    {# include our JavaScript modules #}
+    {{ parent() }}
+    {{ craft.imageOptimize.registerJsModules([
+        'welcome.js',
+    ]) }}
+{% endblock %}

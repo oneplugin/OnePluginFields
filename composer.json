@@ -1,0 +1,50 @@
+{
+    "name": "oneplugin/one-plugin-fields",
+    "description": "OnePlugin Fields lets the Craft community embed rich contents on their website",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "onepluginfields"
+    ],
+    "support": {
+        "docs": "https://docs.oneplugin.co",
+        "issues": "https://github.com/oneplugin/OnePluginFields/issues"
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "OnePlugin",
+            "homepage": "https://oneplugin.co/"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0",
+        "embed/embed": "^3.3"
+    },
+    "require-dev": {
+      "craftcms/cms": "^3.2.0",
+      "codeception/codeception": "^3.0",
+      "vlucas/phpdotenv": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "oneplugin\\onepluginfields\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "OnePlugin Fields",
+        "handle": "one-plugin-fields",
+        "developer": "OnePlugin",
+        "developerUrl": "https://github.com/oneplugin",
+        "documentationUrl": "https://docs.oneplugin.co",
+        "changelogUrl": "https://raw.githubusercontent.com/oneplugin/OnePluginFields/master/CHANGELOG.md",
+        "components": {
+            "onePluginFieldsService": "oneplugin\\onepluginfields\\services\\OnePluginFieldsService"
+        },
+        "class": "oneplugin\\onepluginfields\\OnePluginFields"
+    }
+}
