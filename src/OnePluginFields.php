@@ -209,13 +209,14 @@ class OnePluginFields extends Plugin
                         return;
                     }
 
-                    $queue = Craft::$app->getQueue();
+                    /*$queue = Craft::$app->getQueue();
                     $jobId = $queue->priority(1024)
                                     ->delay(0)
                                     ->ttr(300)
                                     ->push(new ContentSyncJob([
                                         'description' => Craft::t('one-plugin-fields', 'OnePlugin Fields - Job for checking availability of new content packs')
-                                    ]));
+                                    ]));*/
+                    //TODO scheduler instead of delayed queue jobs
 
                     // If installed via console, no need for a redirect
                     if (Craft::$app->getRequest()->getIsConsoleRequest()) {
