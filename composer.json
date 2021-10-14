@@ -21,6 +21,8 @@
             "homepage": "https://oneplugin.co/"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "craftcms/cms": "^3.0.0",
         "embed/embed": "^3.3"
