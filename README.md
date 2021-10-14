@@ -22,7 +22,7 @@ To install the plugin, follow these instructions.
 
         composer require oneplugin/one-plugin-fields
 
-3. Install the plugin via `./craft install/plugin one-plugin-fields` via the CLI, or in the Control Panel, go to Settings → Plugins and click the “Install” button for OnePlugin Fields.
+3. Install the plugin via `./craft plugin/install one-plugin-fields` via the CLI, or in the Control Panel, go to Settings → Plugins and click the “Install” button for OnePlugin Fields.
 
 You can also install OnePlugin Fields via the **Plugin Store** in the Craft Control Panel.
 
