@@ -37,6 +37,8 @@ class SVGIconRenderer extends BaseRenderer
             $this->setAttribute($doc,$svg,'stroke',$asset->iconData['asset']['icon-primary']);
             $this->setAttribute($doc,$svg,'viewbox','0 0 24 24');
             $this->setAttribute($doc,$svg,'fill','none');
+            $this->setAttribute($doc,$svg,'stroke-linecap','round');
+            $this->setAttribute($doc,$svg,'stroke-linejoin','round');
             $svg->appendChild($doc->createCDATASection($asset->iconData['asset']['svg-data']));
             return [$this->htmlFromDOMAfterAddingProperties($doc,$svg,$attributes), true];
         }
