@@ -15,3 +15,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.2 - 2021-10-14
 ### Changes
 - Fixed an SVG Render issue
+
+## 1.0.3 - 2021-10-18
+### Changes
+- Fixed an issue where PDF was not rendering when the same field was used more than once on the same page.
