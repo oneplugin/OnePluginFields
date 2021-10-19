@@ -35,7 +35,7 @@ With OnePlugin Fields and one line of code, gain immediate access to: a library 
 
 OnePlugin supports 9 different media types and adding them to your website is super simple.
 
-OnePlugin adds a custom FieldType to Craft CMS, called OnePlugin Fields. OnePlugin Fields work exactly like regular PlainText or Aseet fields, except that they can be configured to render 9 content types including images, videos, animated icons and svgs to name a few.
+OnePlugin adds a custom FieldType to Craft CMS, called OnePlugin Fields. OnePlugin Fields work exactly like regular PlainText or Asset fields, except that they can be configured to render 9 content types including images, videos, animated icons and svgs to name a few.
 
 A good example use case for OnePlugin Fields is whenever you need a field that offers content managers the ability to add different type of attractive contents.
 
@@ -57,7 +57,7 @@ OnePlugin Fields works both standalone and inside Matrix blocks.
 
 * Feel like you need direction in your life? Don't get frustrated you want it you got it, Embedded Google Maps!
 
-* Select from 1200+ SVGs all under free license and provided just because we love you.
+* Select from 1500+ SVGs all under free license and provided just because we love you.
 
 ## Documentation
 
