@@ -70,6 +70,5 @@ Click here -> [OnePlugin Fields Documentation](https://docs.oneplugin.co/docs/in
 * Add More SVG packs
 * Embed Simple Forms
 * Add option for admins to import free animated icons and SVG icons
-* Release
 
 Brought to you by [OnePlugin Fields](https://oneplugin.co/)
