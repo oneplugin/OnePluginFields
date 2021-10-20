@@ -23,3 +23,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.4 - 2021-10-20
 ### Changes
 - Added documentation links
+
+## 1.0.5 - 2021-10-20
+### Changes
+- Minor Javascript changes for updating the documentation links 
