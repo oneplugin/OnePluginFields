@@ -164,7 +164,9 @@ class OptimizeImageJob extends BaseJob
                 
                 if( ini_get('allow_url_fopen') ) {
                     $headers = get_headers($url, true);
-                    $filesize = $headers['Content-Length'];
+                    if( isset($headers['Content-Length']) ){
+                        $filesize = $headers['Content-Length'];
+                    }
                 } 
                 $image = ['url' => $url,'width'=>$transform->width,'height'=>$transform->height,'size'=>$filesize];
             }

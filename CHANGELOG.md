@@ -19,3 +19,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.3 - 2021-10-18
 ### Changes
 - Fixed an issue where PDF was not rendering when the same field was used more than once on the same page.
+
+## 1.0.4 - 2021-10-20
+### Changes
+- Added documentation links
