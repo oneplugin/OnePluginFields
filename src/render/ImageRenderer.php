@@ -14,6 +14,7 @@ use DOMDocument;
 use DOMElement;
 use DOMXPath;
 use Craft;
+use craft\elements\Asset;
 use oneplugin\onepluginfields\OnePluginFields;
 use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
 use oneplugin\onepluginfields\services\OnePluginFieldsService;
@@ -68,7 +69,10 @@ class ImageRenderer extends BaseRenderer
             $doc->formatOutput = true;
             $doc->preserveWhiteSpace = false;
             $image = $doc->createElement('img');
-            $this->setAttribute($doc,$image,'src',$asset->iconData['asset']);
+            $imageAsset = Craft::$app->getAssets()->getAssetById($asset->iconData['id']);
+            if( $imageAsset ){
+                $this->setAttribute($doc,$image,'src',$imageAsset->getUrl());
+            }
             if( $attributes['size'] ){
                 $this->setAttribute($doc,$image,'style','width:'. $attributes["width"] . ';height:' . $attributes["height"] . ';');
             }
@@ -129,7 +133,10 @@ class ImageRenderer extends BaseRenderer
                 }
             }
             $image = $doc->createElement('img');
-            $this->setAttribute($doc,$image,'src',$asset->iconData['asset']);
+            $imageAsset = Craft::$app->getAssets()->getAssetById($asset->iconData['id']);
+            if( $imageAsset ){
+                $this->setAttribute($doc,$image,'src',$imageAsset->getUrl());
+            }
             if( $attributes['size'] ){
                 $this->setAttribute($doc,$image,'style','width:'. $attributes["width"] . ';height:' . $attributes["height"] . ';');
             }

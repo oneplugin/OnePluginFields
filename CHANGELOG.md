@@ -27,3 +27,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.5 - 2021-10-20
 ### Changes
 - Minor Javascript changes for updating the documentation links 
+
+## 1.0.6 - 2021-10-20
+### Changes
+- Fixed an issue where image will use old urls when the volume changes. This happens only in rare situations when an existing site is cloned and the volumes are updated to use new ones.
