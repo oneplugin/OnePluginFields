@@ -77,6 +77,16 @@
             <button id="secondary-color" class="option" style="background-color: {{settings.secondaryColor}};" type="button">
             </button>
         </div>
+
+        {{ forms.lightswitchField({
+        label: "Embed animated icons on page"|t('one-plugin-fields'),
+        tip: "When enabled, this setting embeds animated icons with the HTML page, increasing page load speed, and user experience"|t('one-plugin-fields'),
+        id: 'aIconDataAsHtml',
+        name: 'settings[aIconDataAsHtml]',
+        toggle: 'settings-aIconDataAsHtml',
+        on: settings.aIconDataAsHtml,
+        onLabel: "Enable."|t('one-plugin-fields')
+    }) }}
     </div>
 </div>
 

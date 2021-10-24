@@ -74,6 +74,8 @@ class Settings extends Model
 
     public $enableCache = true;
 
+    public $aIconDataAsHtml = true;
+
     public $newContentPackAvailable = false;
 
     public $opSettingsHash = 'f9b3ab9dab8d9967db789dec586cafa6';

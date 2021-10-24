@@ -81,12 +81,11 @@ class OnePluginFieldsAsset
     public function render(array $options = [])
     {
         $settings = OnePluginFields::$plugin->getSettings();
-        $hash = 'op_' . $settings->opSettingsHash . '_' .$settings->opImageTag . '_' . md5($this->json . json_encode($options));
-        $cache = true;
+        $hash = 'op_' . $settings->opSettingsHash . '_' . $settings->opImageTag . '_' . $settings->aIconDataAsHtml . md5($this->json . json_encode($options));
         if( $settings->enableCache && Craft::$app->cache->exists($hash)) {
             return TemplateHelper::raw(\Craft::$app->cache->get($hash));
         }
-
+        $cache = true;
         $renderer = $this->createAssetRenderer();
         if( $renderer != null){
             list($html,$cache) = $renderer->render($this,$options);

@@ -31,3 +31,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.0.6 - 2021-10-20
 ### Changes
 - Fixed an issue where image will use old urls when the volume changes. This happens only in rare situations when an existing site is cloned and the volumes are updated to use new ones.
+
+## 1.0.7 - 2021-10-24
+### Changes
+- Update to allow for highspeed caching of animated icons by embedding this media asset directly into the page. Enable or disable this from the settings. 
+Highly recommend using a CDN like Cloudflare in conjunction with this setting. 
