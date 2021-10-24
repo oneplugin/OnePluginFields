@@ -36,3 +36,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changes
 - Update to allow for highspeed caching of animated icons by embedding this media asset directly into the page. Enable or disable this from the settings. 
 Highly recommend using a CDN like Cloudflare in conjunction with this setting. 
+
+## 1.0.8 - 2021-10-24
+### Changes
+- Update to allow for highspeed caching of animated icons by embedding this media asset directly into the page. Enable or disable this from the settings. 
+Highly recommend using a CDN like Cloudflare in conjunction with this setting. 
