@@ -42,7 +42,12 @@ Highly recommend using a CDN like Cloudflare in conjunction with this setting.
 - Update to allow for highspeed caching of animated icons by embedding this media asset directly into the page. Enable or disable this from the settings. 
 Highly recommend using a CDN like Cloudflare in conjunction with this setting. 
 
-## 1.0.8 - 2021-10-24
+## 1.0.9 - 2021-10-24
 ### Changes
 - Update to allow for highspeed caching of animated icons by embedding this media asset directly into the page. Enable or disable this from the settings. 
 Highly recommend using a CDN like Cloudflare in conjunction with this setting. 
+
+## 1.0.10 - 2021-12-09
+### Fixed
+- SVG support is removed from Image Optimization
+- New jobs are not created for generating an optimized image if the metadata already exists

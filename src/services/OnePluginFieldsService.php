@@ -19,6 +19,7 @@ use Embed\Adapters\Adapter;
 use Embed\Embed;
 use DOMDocument;
 use GuzzleHttp\Client;
+use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageRecord;
 use oneplugin\onepluginfields\records\OnePluginFieldsCategory;
 use oneplugin\onepluginfields\records\OnePluginFieldsSVGIcon;
 use oneplugin\onepluginfields\records\OnePluginFieldsAnimatedIcon;
@@ -144,7 +145,6 @@ class OnePluginFieldsService extends Component
         $queue = Craft::$app->getQueue();
         $assets = OnePluginFieldsOptimizedImage::find()->all();
         foreach($assets as $asset){
-
             Craft::$app->db->createCommand()
             ->upsert(OnePluginFieldsOptimizedImage::tableName(), [
                 'content' => '',
@@ -163,7 +163,10 @@ class OnePluginFieldsService extends Component
     public function addImageOptimizeJob($assetId, $force,$runQueue = false){
 
         //TODO - check whether same job exists
-        
+        $assets = OnePluginFieldsOptimizedImageRecord::find()->where(['assetId' => $assetId])->all();
+        if( count($assets) > 0 ){
+            return;
+        }
         if($force){ //Make sure the content is cleared
             Craft::$app->db->createCommand()
                     ->upsert(OnePluginFieldsOptimizedImage::tableName(), [

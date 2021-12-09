@@ -2,7 +2,7 @@
     "name": "oneplugin/one-plugin-fields",
     "description": "OnePlugin Fields lets the Craft community embed rich contents on their website",
     "type": "craft-plugin",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "keywords": [
         "craft",
         "cms",

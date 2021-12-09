@@ -73,6 +73,15 @@ class OptimizeImageJob extends BaseJob
         $model = new OnePluginFieldsOptimizedImage('');
 
         $inputFormat = $asset->extension;
+        if( strtolower($inputFormat) == 'svg'){
+            //SVG's are not supported yet
+            $model->originalUrl = $asset->getUrl();
+            $model->width = $asset->width;
+            $model->height = $asset->height;
+            $model->name = $asset->title;
+            $model->extension = 'svg';
+            return $model;
+        }
         $outputFormat = '';
         if( $settings->opOutputFormat == 'same'){
             $outputFormat = $inputFormat;
