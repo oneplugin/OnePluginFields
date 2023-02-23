@@ -24,6 +24,32 @@
                                         <button type="button" class="btn-filter" tabindex="0">Search</button>    
                                     </div>
                                 </div>
+                                <div id="cafilter" class="hidden">
+                                    <div class="checkboxes">
+                                        <span>Filter:</span>
+                                        <input style="margin-left:20px;" type="checkbox" id="allIcons" checked>
+                                        <label for="allIcons">Show All Icons</label>
+                                        <input style="margin-left:20px;" type="checkbox" id="loopIcons">
+                                        <label for="loopIcons">Show Loop Icons<span class="info op-tooltip" style="vertical-align: middle !important;"><span class="tooltips">
+                                                <p>Loop – Filter animated icons which play in a continuous loop.</p> 
+                                                <p>Trigger types:</p>
+                                                <p>Loop: A continuous loop.</p>
+                                                <p>Hover: Play a continuous loop while the mouse cursor hovers over the icon.</p>
+                                                <p>Click: Play a single loop when a user clicks on the icon.</p>
+                                                </span></span></label>
+                                        <input style="margin-left:20px;" type="checkbox" id="morphIcons">
+                                        <label for="morphIcons">Show Morph Icons <span class="info op-tooltip" style="vertical-align: middle !important;"> <span class="tooltips">
+                                        <p>Morph – Plays once forwards, then backwards. Perfect for user interactions.</p>
+                                        <p>Trigger types:</p>
+                                        <p>Morph once: Plays forwards on hover, then reverses once the mouse leaves the icons area. </p>
+                                        <p>Morph two Times: Animation plays forwards then backwards on hover.</p>
+                                        </span></span></label>
+                                    </div>
+                                    <div class="btns">
+                                        <button type="button" class="btn-filter" tabindex="0">Apply</button>
+                                    </div>
+                                </div>
+                                
                                 <div class="icon-header">
                                     <span id="cattitle"></span>
                                     <slot name="actions"></slot>
@@ -31,6 +57,11 @@
                                 <div class="icons">
 
                                 </div>
+                                <!--<div class="noicondiv">
+                                   <strong class="heading">No icons to show</strong>
+                                   <h2>Oppss, we can't find demanded icons</h2>
+                                   <a target="_blank" href="https://oneplugin.co" class="btn">Request new icon</a>
+                                </div>-->
                             </div>
                         </div>
                     </webdiv-library-icons>
@@ -89,13 +120,6 @@
                                 </div>
                             </div>
                         </div>
-                        {% if devMode %}
-                            <div class="btns" style="text-align:center;flex: 1;flex-basis: auto;margin:20px 0;">
-                                <button style="width:75%;margin-left:0px !important" type="button" class="btn-filter" id="copy-code" tabindex="0">Copy HTML Code</button>
-                                <span class="info op-tooltip" style="vertical-align: middle !important;"> <p>This option is not available in production environment</p></span>
-                            </div>
-                        {% endif %}
-
                     </div>
                 </webdiv-library-editor>
             </div>

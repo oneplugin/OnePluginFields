@@ -1,17 +1,16 @@
 <?php
 
 /**
- * OnePlugin Media plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePlugin Media lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginmedia\models;
+namespace oneplugin\onepluginfields\models;
 
-use Craft;
 use craft\base\Model;
 
 class Settings extends Model
@@ -24,7 +23,10 @@ class Settings extends Model
      *
      * @var string
      */
-    public $pluginName = 'OnePlugin Media';
+    public $pluginName = 'OnePlugin Fields';
+    public $primaryColor = '#545454';
+    public $secondaryColor = '#66a1ee';
+    public $strokeWidth = 50;
     public $svgStrokeColor = '#66a1ee';
     public $svgStrokeWidth = 50;
     public $opOutputFormat = 'webp';
@@ -64,15 +66,31 @@ class Settings extends Model
 
     public $opSettingsHash = 'f9b3ab9dab8d9967db789dec586cafa6';
 
+    // Public Methods
+    // =========================================================================
+
+    /**
+     * Returns the validation rules for attributes.
+     *
+     * Validation rules are used by [[validate()]] to check if attribute values are valid.
+     * Child classes may override this method to declare different validation rules.
+     *
+     * More info: http://www.yiiframework.com/doc-2.0/guide-input-validation.html
+     *
+     * @return array
+     */
+    /**
+     * @inheritdoc
+     */
     public function rules(): array
     {
         $rules = parent::defineRules();
 
-        $rules[] = [['pluginName', 'svgStrokeColor','svgStrokeWidth'], 'required'];
+        $rules[] = [['pluginName', 'primaryColor', 'secondaryColor','svgStrokeColor','strokeWidth','svgStrokeWidth'], 'required'];
         $rules[] = [['pluginName'], 'string', 'max' => 52];
-        $rules[] = [['svgStrokeWidth'], 'number', 'integerOnly' => true];
-        $rules[] = [['svgStrokeWidth'], 'number', 'min' => 1];
-        $rules[] = [['svgStrokeWidth'], 'number', 'max' => 100];
+        $rules[] = [['strokeWidth','svgStrokeWidth'], 'number', 'integerOnly' => true];
+        $rules[] = [['strokeWidth','svgStrokeWidth'], 'number', 'min' => 1];
+        $rules[] = [['strokeWidth','svgStrokeWidth'], 'number', 'max' => 100];
 
         return $rules;
     }

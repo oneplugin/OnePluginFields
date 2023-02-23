@@ -1,25 +1,24 @@
 <?php
 
 /**
- * OnePlugin Media plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePlugin Media lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginmedia\gql\models;
-
+namespace oneplugin\onepluginfields\gql\models;
 use Craft;
 use craft\base\Model;
 use craft\gql\TypeLoader;
 use craft\gql\base\GqlTypeTrait;
 use craft\gql\GqlEntityRegistry;
 use GraphQL\Type\Definition\Type;
-use oneplugin\onepluginmedia\gql\resolvers\OnePluginMediaResolver;
-use oneplugin\onepluginmedia\records\OnePluginMediaOptimizedImage;
-use oneplugin\onepluginmedia\models\OnePluginMediaOptimizedImage as OnePluginMediaOptimizedImageModel;
+use oneplugin\onepluginfields\gql\resolvers\OnePluginFieldResolver;
+use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage;
+use oneplugin\onepluginfields\models\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageModel;
 
 class ImageGql extends Model
 {
@@ -29,19 +28,18 @@ class ImageGql extends Model
 
     public static function getName($context = null): string
     {
-        return 'OnePluginMedia_Image';
+        return 'OnePluginFields_Image';
     }
 
     static public function getType(): Type
     {
         $typeName = self::getName();
         $type = GqlEntityRegistry::getEntity($typeName)
-          ?: GqlEntityRegistry::createEntity($typeName, new OnePluginMediaResolver([
+          ?: GqlEntityRegistry::createEntity($typeName, new OnePluginFieldResolver([
           'name'   => static::getName(),
           'fields' => self::class . '::getFieldDefinitions',
-          'description' => 'The interface implemented by OnepluginMedia SVG type.',
+          'description' => 'The interface implemented by OnePlugin Fields Image type.',
           ]));
-        
 
         TypeLoader::registerType(static::getName(), function () use ($type) {
           return $type;
@@ -141,9 +139,9 @@ class ImageGql extends Model
     public function getSrcset(): string
     {
         $srcset = '';
-        $assets = OnePluginMediaOptimizedImage::find()->where(['assetId' => $this->iconData['id']])->all();
+        $assets = OnePluginFieldsOptimizedImage::find()->where(['assetId' => $this->iconData['id']])->all();
         if( count($assets) > 0 && !empty($assets[0]['content'])){
-            $optimizedImage = new OnePluginMediaOptimizedImageModel($assets[0]['content']);
+            $optimizedImage = new OnePluginFieldsOptimizedImageModel($assets[0]['content']);
             $imageUrls = null;
             
             if( $optimizedImage->extension != 'webp' ){
@@ -170,11 +168,11 @@ class ImageGql extends Model
     public function getSrcsetWebP(): string
     {
         $srcset = '';
-        $assets = OnePluginMediaOptimizedImage::find()->where(['assetId' => $this->iconData['id']])->all();
+        $assets = OnePluginFieldsOptimizedImage::find()->where(['assetId' => $this->iconData['id']])->all();
         if( count($assets) > 0 && !empty($assets[0]['content'])){
-            $optimizedImage = new OnePluginMediaOptimizedImageModel($assets[0]['content']);
+            $optimizedImage = new OnePluginFieldsOptimizedImageModel($assets[0]['content']);
             if( $optimizedImage->extension == 'webp' ){
-                $optimizedImage = new OnePluginMediaOptimizedImageModel($assets[0]['content']);
+                $optimizedImage = new OnePluginFieldsOptimizedImageModel($assets[0]['content']);
                 $imageUrls = $optimizedImage->imageUrls;
                 foreach ($imageUrls as $key => $value) {
                     if( !empty($value['url']) ){

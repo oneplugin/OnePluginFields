@@ -1,18 +1,18 @@
 {
-    "name": "oneplugin/one-plugin-media",
-    "description": "OnePlugin Media lets the Craft community embed rich contents on their website",
+    "name": "oneplugin/one-plugin-fields",
+    "description": "OnePlugin Fields lets the Craft community embed rich contents on their website",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "1.0.11",
     "keywords": [
         "craft",
         "cms",
         "craftcms",
         "craft-plugin",
-        "onepluginmedia"
+        "onepluginfields"
     ],
     "support": {
         "docs": "https://docs.oneplugin.co",
-        "issues": "https://github.com/oneplugin/OnePluginMedia/issues"
+        "issues": "https://github.com/oneplugin/OnePluginFields/issues"
     },
     "license": "proprietary",
     "authors": [
@@ -24,7 +24,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "craftcms/cms": "^4.0.0"
+        "craftcms/cms": "^4.0.0",
+        "embed/embed": "^3.3"
     },
     "require-dev": {
       "craftcms/cms": "^4.0.0",
@@ -33,19 +34,19 @@
     },
     "autoload": {
         "psr-4": {
-          "oneplugin\\onepluginmedia\\": "src/"
+          "oneplugin\\onepluginfields\\": "src/"
         }
     },
     "extra": {
-        "name": "OnePlugin Media",
-        "handle": "one-plugin-media",
+        "name": "OnePlugin Fields",
+        "handle": "one-plugin-fields",
         "developer": "OnePlugin",
         "developerUrl": "https://github.com/oneplugin",
         "documentationUrl": "https://docs.oneplugin.co",
-        "changelogUrl": "https://raw.githubusercontent.com/oneplugin/OnePluginMedia/master/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/oneplugin/OnePluginFields/master/CHANGELOG.md",
         "components": {
-            "onePluginMediaService": "oneplugin\\onepluginmedia\\services\\OnePluginMediaService"
+            "onePluginFieldsService": "oneplugin\\onepluginfields\\services\\OnePluginFieldsService"
         },
-        "class": "oneplugin\\onepluginmedia\\OnePluginMedia"
+        "class": "oneplugin\\onepluginfields\\OnePluginFields"
     }
 }

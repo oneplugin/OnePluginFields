@@ -1,15 +1,15 @@
 <?php
 
 /**
- * OnePlugin Media plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePlugin Media lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginmedia\elements;
+namespace oneplugin\onepluginfields\elements;
 
 use Craft;
 use Exception;
@@ -19,16 +19,17 @@ use craft\helpers\UrlHelper;
 use craft\helpers\StringHelper;
 use craft\elements\actions\Delete;
 use craft\elements\actions\Restore;
-use oneplugin\onepluginmedia\OnePluginMedia;
 use craft\elements\db\ElementQueryInterface;
-use oneplugin\onepluginmedia\records\OnePluginMediaSVGIcon;
-use oneplugin\onepluginmedia\elements\db\SVGIconPackQuery;
-use oneplugin\onepluginmedia\records\OnePluginMediaCategory;
-use oneplugin\onepluginmedia\records\OnePluginMediaSVGIconPack;
+use oneplugin\onepluginfields\OnePluginFields;
+use oneplugin\onepluginfields\elements\db\SVGIconPackQuery;
+use oneplugin\onepluginfields\records\OnePluginFieldsSVGIcon;
+use oneplugin\onepluginfields\records\OnePluginFieldsCategory;
+use oneplugin\onepluginfields\records\OnePluginFieldsSVGIconPack;
 
 class SVGIconPack extends Element
 {
-
+    // Public Properties
+    // =========================================================================
     public $settings;
 
     public $name;
@@ -42,10 +43,12 @@ class SVGIconPack extends Element
     public $count;
 
     public $icons;
+        // Static Methods
+    // =========================================================================
 
     public static function displayName(): string
     {
-        return Craft::t('one-plugin-media', 'SVG Icon Pack');
+        return Craft::t('one-plugin-fields', 'SVG Icon Pack');
     }
 
     /**
@@ -53,7 +56,7 @@ class SVGIconPack extends Element
      */
     public static function pluralDisplayName(): string
     {
-        return Craft::t('one-plugin-media', 'SVG Icon Pack');
+        return Craft::t('one-plugin-fields', 'SVG Icon Pack');
     }
 
     /**
@@ -123,7 +126,7 @@ class SVGIconPack extends Element
         parent::init();
 
         if (empty($this->settings)) {
-            $this->settings = OnePluginMedia::$plugin->getSettings();
+            $this->settings = OnePluginFields::$plugin->getSettings();
         }
         $this->icons = [];
         $this->count = 0;
@@ -223,15 +226,15 @@ class SVGIconPack extends Element
 
         $actions[] = $elementsService->createAction([
             'type' => Delete::class,
-            'confirmationMessage' => Craft::t('one-plugin-media', 'Are you sure you want to delete the selected SVG Icon Pack?'),
-            'successMessage' => Craft::t('one-plugin-media', 'SVG Icon Pack deleted.'),
+            'confirmationMessage' => Craft::t('one-plugin-fields', 'Are you sure you want to delete the selected SVG Icon Pack?'),
+            'successMessage' => Craft::t('one-plugin-fields', 'SVG Icon Pack deleted.'),
         ]);
 
         $actions[] = Craft::$app->elements->createAction([
             'type' => Restore::class,
-            'successMessage' => Craft::t('one-plugin-media', 'SVG Icon Pack restored.'),
-            'partialSuccessMessage' => Craft::t('one-plugin-media', 'Some SVG Icon Packs are restored.'),
-            'failMessage' => Craft::t('one-plugin-media', 'SVG Icon Pack not restored.'),
+            'successMessage' => Craft::t('one-plugin-fields', 'SVG Icon Pack restored.'),
+            'partialSuccessMessage' => Craft::t('one-plugin-fields', 'Some SVG Icon Packs are restored.'),
+            'failMessage' => Craft::t('one-plugin-fields', 'SVG Icon Pack not restored.'),
         ]);
 
         return $actions;
@@ -241,17 +244,17 @@ class SVGIconPack extends Element
     {
         $record = null;
         if (!$isNew) {
-            $record = OnePluginMediaSVGIconPack::findOne($this->id);
+            $record = OnePluginFieldsSVGIconPack::findOne($this->id);
             if (!$record) {
                 throw new Exception('Invalid Icon Pack ID: '.$this->id);
             }
         }
         else{
-            $record = new OnePluginMediaSVGIconPack();
+            $record = new OnePluginFieldsSVGIconPack();
             $record->id = $this->id;
         }
         
-        $category = new OnePluginMediaCategory();
+        $category = new OnePluginFieldsCategory();
         $category->name = $this->title;
         $category->type = "svg";
         $category->parent_id = 0;
@@ -259,7 +262,7 @@ class SVGIconPack extends Element
         $category->save();
 
         foreach($this->icons as $key => $value){
-            $icon = new OnePluginMediaSVGIcon();
+            $icon = new OnePluginFieldsSVGIcon();
             $icon->category = $category->id;
             $icon->name = rand(10000,10000000) . '_' . $key;
             $icon->title = $key;
@@ -289,9 +292,9 @@ class SVGIconPack extends Element
      */
     public function afterDelete(): void
     {
-        $record = OnePluginMediaSVGIconPack::findOne($this->id);
-        Craft::$app->getDb()->createCommand('delete from onepluginmedia_svg_icon where category = ' . $record->category)->execute();
-        Craft::$app->getDb()->createCommand('delete from onepluginmedia_category where id = ' . $record->category)->execute();
+        $record = OnePluginFieldsSVGIconPack::findOne($this->id);
+        Craft::$app->getDb()->createCommand('delete from onepluginfields_svg_icon where category = ' . $record->category)->execute();
+        Craft::$app->getDb()->createCommand('delete from onepluginfields_category where id = ' . $record->category)->execute();
         $record->delete();
     }
 
@@ -310,7 +313,7 @@ class SVGIconPack extends Element
      */
     public function getCpEditUrl(): null|string
     {
-        return UrlHelper::cpUrl('one-plugin-media/svg-icons/edit/' . $this->id);
+        return UrlHelper::cpUrl('one-plugin-fields/svg-icons/edit/' . $this->id);
     }
     
 }

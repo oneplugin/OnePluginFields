@@ -1,16 +1,16 @@
 <?php
 
 /**
- * OnePlugin Media plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePlugin Media lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 return [
-    'OnePluginMedia plugin loaded' => 'OnePluginMedia plugin loaded',
+    'OnePluginFields plugin loaded' => 'OnePluginFields plugin loaded',
     'This field is required' => 'This field is required',
     'Add Image' => 'Add Image',
     'Embed Video' => 'Embed Video',

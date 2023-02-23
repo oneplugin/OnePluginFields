@@ -1,16 +1,16 @@
-{% extends "one-plugin-media/_layouts/elementindex" %}
+{% extends "one-plugin-fields/_layouts/elementindex" %}
 
-{% set title = "SVG Icons Packs"|t('one-plugin-media') %}
+{% set title = "SVG Icons Packs"|t('one-plugin-fields') %}
 {% set crumbs = [
-    { label: settings.pluginName, url: url("one-plugin-media") },
-    { label: "SVG Icons Packs"|t("one-plugin-media"), url: url("one-plugin-media/galleries") },
+    { label: settings.pluginName, url: url("one-plugin-fields") },
+    { label: "SVG Icons Packs"|t("one-plugin-fields"), url: url("one-plugin-fields/galleries") },
 ]
 %}
-{% set elementType = 'oneplugin\\onepluginmedia\\elements\\SVGIconPack' %}
+{% set elementType = 'oneplugin\\onepluginfields\\elements\\SVGIconPack' %}
 {% set selectedSubnavItem = 'svg-icon-packs' %}
 {% block actionButton %}
     <div class="buttons">
-        <a id="create-new-svg-icon-pack" class="btn submit add icon" href="{{ url('one-plugin-media/svg-icons/new') }}">{{ "New SVG Icon Pack"|t('one-plugin-media') }}</a>
+        <a id="create-new-svg-icon-pack" class="btn submit add icon" href="{{ url('one-plugin-fields/svg-icons/new') }}">{{ "New SVG Icon Pack"|t('one-plugin-fields') }}</a>
     </div>
 {% endblock %}
 

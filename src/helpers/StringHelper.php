@@ -1,18 +1,27 @@
 <?php
 
 /**
- * OnePlugin Media plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePlugin Media lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginmedia\helpers;
+namespace oneplugin\onepluginfields\helpers;
 
 class StringHelper
 {
+    /**
+     * Replaces all of "{someKey}" occurrences in $string
+     * with their respective value counterparts from $values array
+     *
+     * @param string $string
+     * @param array  $values
+     *
+     * @return string
+     */
     public static function replaceValues($string, $values): string
     {
         foreach (self::flattenArrayValues($values) as $key => $value) {
@@ -42,6 +51,13 @@ class StringHelper
         return $return;
     }
 
+    /**
+     * Splits an underscored of camelcased string into separate words
+     *
+     * @param string $string
+     *
+     * @return string
+     */
     public static function humanize($string): string
     {
         $string = strtolower(trim(preg_replace(['/([A-Z])/', "/[_\\s]+/"], ['_$1', ' '], $string)));
@@ -49,6 +65,14 @@ class StringHelper
         return $string;
     }
 
+    /**
+     * Turns every first letter in every word in the string into a camel cased letter
+     *
+     * @param string $string
+     * @param string $delimiter
+     *
+     * @return string
+     */
     public static function camelize($string, $delimiter = ' '): string
     {
         $stringParts = explode($delimiter, $string);

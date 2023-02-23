@@ -1,3 +1,18 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Animated Icons plugin for Craft CMS 3.x
+ *
+ * AnimatedIconsField Field Input
+ *
+ * @author    Jugs
+ * @copyright Copyright (c) 2021 Jugs
+ * @link      https://oneplugin.co/
+ * @package   AnimatedIcons
+ * @since     1.0.0
+ */
+#}
+
 {% import "_includes/forms" as forms %}
 {% set jsClass = (jsClass is defined and jsClass ? jsClass : 'AnimatedIconSelectInput') -%}
 
@@ -24,10 +39,31 @@
             <div class="select">
                 <select id="{{ id }}-select">
                     {% if '*' in allowedContents or 'imageAsset' in allowedContents %}
-                        <option value="imageAsset">{{"Add Image"|t('one-plugin-media')}}</option>
+                        <option value="imageAsset">{{"Add Image"|t('one-plugin-fields')}}</option>
+                    {% endif %}
+                    {% if '*' in allowedContents or 'animatedIcons' in allowedContents %}
+                        <option value="animatedIcons">{{"Add Animated Icon"|t('one-plugin-fields')}}</option>
                     {% endif %}
                     {% if '*' in allowedContents or 'svg' in allowedContents %}
-                        <option value="svg">{{"Add SVG Icon"|t('one-plugin-media')}}</option>
+                        <option value="svg">{{"Add SVG Icon"|t('one-plugin-fields')}}</option>
+                    {% endif %}
+                    {% if '*' in allowedContents or 'video' in allowedContents %}
+                        <option value="video">{{"Embed Video"|t('one-plugin-fields')}}</option>
+                    {% endif %}
+                    {% if '*' in allowedContents or 'social' in allowedContents %}
+                        <option value="social">{{"Embed Social"|t('one-plugin-fields')}}</option>
+                    {% endif %}
+                    {% if '*' in allowedContents or 'website' in allowedContents %}
+                        <option value="website">{{"Embed Website"|t('one-plugin-fields')}}</option>
+                    {% endif %}
+                    {% if '*' in allowedContents or 'map' in allowedContents %}
+                        <option value="gmap">{{"Embed Google Map"|t('one-plugin-fields')}}</option>
+                    {% endif %}
+                    {% if '*' in allowedContents or 'pdf' in allowedContents %}
+                        <option value="pdf">{{"Embed PDF Document"|t('one-plugin-fields')}}</option>
+                    {% endif %}
+                    {% if '*' in allowedContents or 'office' in allowedContents %}
+                        <option value="office">{{"Embed Office Document"|t('one-plugin-fields')}}</option>
                     {% endif %}
                 </select>
             </div>
@@ -39,7 +75,35 @@
             </div>
 
             <div class="flex">
-                <button type="button" class="btn add icon dashed">{{"Add Image"|t('one-plugin-media')}}</button>
+                <button type="button" class="btn add icon dashed">{{"Add Image"|t('one-plugin-fields')}}</button>
+            </div>
+        </div>
+
+
+        <div id="{{ id }}-video" class="op-select hidden">
+            <input type="text" id="{{ id }}-url" class="text fullwidth" autocomplete="off" placeholder="{{"Video Url"|t('one-plugin-fields')}}">
+            <p id="{{ id }}-info" class="notice with-icon">Add the full URL to link your video, social feed or embed a webpage above. <a href="https://docs.oneplugin.co/docs/embed-videos" class="go" rel="noopener" target="_blank">Click this link if you would like to know more.</a></p>
+        </div>
+
+        <div id="{{ id }}-gmap" class="op-select hidden">
+            <input type="text" id="{{ id }}-input-gmap" class="text fullwidth" placeholder="{{"Address"|t('one-plugin-fields')}}">
+            <p id="{{ id }}-gmap-info" class="notice with-icon">Add the location address in the above textbox. <a href="https://docs.oneplugin.co/docs/embed-maps" class="go" rel="noopener" target="_blank">Click this link if you would like to know more.</a></p>
+            <input type="text" id="{{ id }}-gmap-latitude" placeholder="Latitude" value="" readonly="readonly" class="text code fullwidth disabled" aria-describedby="checkbox-instructions" style="width:48%;">    
+            <input type="text" id="{{ id }}-gmap-longitude" placeholder="Longitude" value="" readonly="readonly" class="text code fullwidth disabled disabled" aria-describedby="checkbox-instructions" style="width:48%;">    
+        </div>
+        <div id="{{ id }}-gmap2" class="op-select op-select-map hidden">
+            <input type="text" id="{{ id }}-input-gmap2" class="text op-text-map" placeholder="{{"Address"|t('one-plugin-fields')}}">
+            <button id="{{ id }}-gmap2-btn" class="btn op-btn-map">Set Address</button>
+            <p id="{{ id }}-gmap-info" class="notice with-icon">You haven't specified the Google Maps Api key. So please enter the name of the place as it is displayed in the Google Maps. <a href="https://docs.oneplugin.co/docs/embed-maps" class="go" rel="noopener" target="_blank">Click this link to know more.</a></p>
+        </div>
+
+        <div id="{{ id }}-animatedIcons" class="op-select hidden">
+            <div class="elements">
+
+            </div>
+
+            <div class="flex">
+                <button type="button" class="btn add icon dashed" tabindex="0">{{"Add Animated Icon"|t('one-plugin-fields')}}</button>
             </div>
         </div>
 
@@ -49,12 +113,32 @@
             </div>
 
             <div class="flex">
-                <button type="button" class="btn add icon dashed" tabindex="0">{{"Add SVG Icon"|t('one-plugin-media')}}</button>
+                <button type="button" class="btn add icon dashed" tabindex="0">{{"Add SVG Icon"|t('one-plugin-fields')}}</button>
+            </div>
+        </div>
+
+        <div id="{{ id }}-pdf" class="op-select hidden">
+            <div class="elements">
+
+            </div>
+
+            <div class="flex">
+                <button type="button" class="btn add icon dashed" tabindex="0">{{"Embed PDF Document"|t('one-plugin-fields')}}</button>
+            </div>
+        </div>
+
+        <div id="{{ id }}-office" class="op-select hidden">
+            <div class="elements">
+
+            </div>
+
+            <div class="flex">
+                <button type="button" class="btn add icon dashed" tabindex="0">{{"Embed Office Document"|t('one-plugin-fields')}}</button>
             </div>
         </div>
 
         <div class="op-preview">
-            <p class="fullwidth"><strong>{{"Preview"|t('one-plugin-media')}}</strong></p>
+            <p class="fullwidth"><strong>{{"Preview"|t('one-plugin-fields')}}</strong></p>
         </div>
         {% set iconType,altText,siteId,assetId,name,assetUrl = '','','','','','' %}
         {% set arrFieldValue = fieldValue ? fieldValue.iconData : [] %}
@@ -81,11 +165,13 @@
         
 
         <div id="{{ id }}-preview" class="op-icon-preview">
-            {% if iconType is not empty and (iconType == 'imageAsset') %}
+            {% if iconType is not empty and (iconType == 'imageAsset' or iconType == 'pdf' or iconType == 'office') %}
                 {% set status = 'exists' %}
                 {% if asset is not defined or asset is null %} {% set status = 'deleted' %}{%endif%}
                 <div style="display:flex"><div class="element small hasthumb" data-type="craft\elements\Asset" data-alt="{{altText}}" data-status="{{status}}" data-site-id="{{ siteId }}" data-id="{{ assetId }}" data-title="{{ name }}" data-status="enabled" data-url="{{ assetUrl }}" data-editable=""><div class="elementthumb"> {{fieldValue.getThumbHtml()}} </div><div class="label"><span class="title">{{ name }}</span></div></div><a id="{{ id }}-remove" style="margin-top:6px;margin-left:10px;" class="delete icon" title="Remove"></a></div>
             {% endif %}
         </div>
+
+        <div id="{{ id }}-preview-map" class="hidden google-map"></div>
     </div>
 </div>

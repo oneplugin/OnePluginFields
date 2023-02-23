@@ -1,15 +1,15 @@
 <?php
 
 /**
- * OnePlugin Media plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePlugin Media lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginmedia\controllers;
+namespace oneplugin\onepluginfields\controllers;
 
 use Craft;
 
@@ -17,9 +17,9 @@ use yii\web\Response;
 use craft\web\Controller;
 use craft\web\assets\cp\CpAsset;
 
-use oneplugin\onepluginmedia\OnePluginMedia;
-use oneplugin\onepluginmedia\helpers\StringHelper;
-use oneplugin\onepluginmedia\records\OnePluginMediaVersion;
+use oneplugin\onepluginfields\OnePluginFields;
+use oneplugin\onepluginfields\helpers\StringHelper;
+use oneplugin\onepluginfields\records\OnePluginFieldsVersion;
 
 class SettingsController extends Controller
 {
@@ -28,7 +28,7 @@ class SettingsController extends Controller
 
     public function init():void
     {
-        $this->plugin = OnePluginMedia::$plugin;
+        $this->plugin = OnePluginFields::$plugin;
         parent::init();
     }
 
@@ -38,14 +38,14 @@ class SettingsController extends Controller
         $settings = $this->plugin->getSettings();
 
         $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
-            '@oneplugin/onepluginmedia/assetbundles/onepluginmedia/dist',
+            '@oneplugin/onepluginfields/assetbundles/onepluginfields/dist',
             true
         );
         
-        Craft::$app->getView()->registerCssFile($baseAssetsUrl . '/css/onepluginmedia.min.css');
+        Craft::$app->getView()->registerCssFile($baseAssetsUrl . '/css/onepluginfields.min.css');
         Craft::$app->getView()->registerJsFile($baseAssetsUrl . '/js/spectrum.min.js',['depends' => CpAsset::class]);
 
-        return $this->renderTemplate('one-plugin-media/settings/_general', array_merge(
+        return $this->renderTemplate('one-plugin-fields/settings/_general', array_merge(
                 [
                     'plugin' => $this->plugin,
                     'settings' => $settings
@@ -57,13 +57,13 @@ class SettingsController extends Controller
     public function actionSync(): Response
     {
         $settings = $this->plugin->getSettings();
-        $version = OnePluginMediaVersion::latest_version();
+        $version = OnePluginFieldsVersion::latest_version();
         $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
-            '@oneplugin/onepluginmedia/assetbundles/onepluginmedia/dist',
+            '@oneplugin/onepluginfields/assetbundles/onepluginfields/dist',
             true
         );
         Craft::$app->getView()->registerJsFile($baseAssetsUrl . '/js/party.min.js',['depends' => CpAsset::class]);
-        return $this->renderTemplate('one-plugin-media/settings/_sync', array_merge(
+        return $this->renderTemplate('one-plugin-fields/settings/_sync', array_merge(
                 [
                     'plugin' => $this->plugin,
                     'settings' => $settings,
@@ -79,16 +79,16 @@ class SettingsController extends Controller
         $this->requirePostRequest();
         $postData = Craft::$app->request->post('settings', []);
 
-        $plugin = OnePluginMedia::getInstance();
+        $plugin = OnePluginFields::getInstance();
         $plugin->setSettings($postData);
         $settings = $this->plugin->getSettings();
         
         if (Craft::$app->plugins->savePluginSettings($plugin, $postData)) {
-            Craft::$app->session->setNotice(OnePluginMedia::t('Settings Saved'));
+            Craft::$app->session->setNotice(OnePluginFields::t('Settings Saved'));
 
             $opHash = $this->generateOpHash($postData);
             if( $opHash != $settings->opSettingsHash){
-                $this->plugin->onePluginMediaService->addRegenerateAllImageOptimizeJob();
+                $this->plugin->onePluginFieldsService->addRegenerateAllImageOptimizeJob();
                 Craft::$app->plugins->savePluginSettings($plugin, ['opSettingsHash'=>$opHash]);
             }
             return $this->redirectToPostedUrl();
@@ -102,16 +102,16 @@ class SettingsController extends Controller
 
     public function actionCheckForUpdates()
     {
-        $version = OnePluginMediaVersion::latest_version();
-        $response = $this->plugin->onePluginMediaService->checkForUpdates($version);
+        $version = OnePluginFieldsVersion::latest_version();
+        $response = $this->plugin->onePluginFieldsService->checkForUpdates($version);
         return $this->asJson($response);
     }
 
     public function actionDownloadFiles(){
 
-        $version = OnePluginMediaVersion::latest_version();
-        $response = $this->plugin->onePluginMediaService->checkForUpdates($version);
-        return $this->asJson($this->plugin->onePluginMediaService->downloadLatestVersion($response));
+        $version = OnePluginFieldsVersion::latest_version();
+        $response = $this->plugin->onePluginFieldsService->checkForUpdates($version);
+        return $this->asJson($this->plugin->onePluginFieldsService->downloadLatestVersion($response));
 
     }
 

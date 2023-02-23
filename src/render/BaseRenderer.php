@@ -1,35 +1,36 @@
 <?php
 
 /**
- * OnePlugin Media plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePlugin Media lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginmedia\render;
+namespace oneplugin\onepluginfields\render;
 
 use Craft;
 use DOMElement;
 use DOMDocument;
 use craft\helpers\Html;
-use oneplugin\onepluginmedia\models\OnePluginMediaAsset;
+use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
 
 class BaseRenderer implements RenderInterface
 {
-    private $defaultSize = ["svg" => ["width" => "256px","height" => "256px"],"imageAsset" => ["width" => "100%","height" => "100%"]];
+    private $defaultSize = ["animatedIcons" => ["width" => "256px","height" => "256px"],"svg" => ["width" => "256px","height" => "256px"],"imageAsset" => ["width" => "100%","height" => "100%"],"video" => ["width" => "100%","height" => "100%"],"social" => ["width" => "100%","height" => "100%"]
+                                ,"website" => ["width" => "100%","height" => "100%"],"pdf" => ["width" => "100%","height" => "100%"],"office" => ["width" => "100%","height" => "100%"],"gmap" => ["width" => "100%","height" => "100%"]];
 
-    public function render(OnePluginMediaAsset $asset, array $options): array{
+    public function render(OnePluginFieldsAsset $asset, array $options): array{
 
-        return [Html::tag('div', Craft::t('one-plugin-media', 'No renderer found for type ' . $asset->iconData['type'])),false];
+        return [Html::tag('div', Craft::t('one-plugin-fields', 'No renderer found for type ' . $asset->iconData['type'])),false];
     }
 
     public function includeAssets(){
         
     }
-    protected function normalizeOptionsForSize(OnePluginMediaAsset $asset,array $options){
+    protected function normalizeOptionsForSize(OnePluginFieldsAsset $asset,array $options){
 
         $options['size'] = empty($options['size']) ? false : $options['size'];
         if( $options['size'] ){
