@@ -1,15 +1,15 @@
 <?php
 
 /**
- * OnePlugin Fields plugin for Craft CMS 3.x
+ * OnePlugin Media plugin for Craft CMS 3.x
  *
- * OnePlugin Fields lets the Craft community embed rich contents on their website
+ * OnePlugin Media lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginfields\controllers;
+namespace oneplugin\onepluginmedia\controllers;
 
 use Craft;
 
@@ -17,11 +17,11 @@ use DOMElement;
 use DOMDocument;
 use yii\web\Response;
 use craft\web\Controller;
-use oneplugin\onepluginfields\OnePluginFields;
-use oneplugin\onepluginfields\helpers\EvalMath;
-use oneplugin\onepluginfields\elements\SVGIconPack;
-use oneplugin\onepluginfields\helpers\StringHelper;
-use oneplugin\onepluginfields\records\OnePluginFieldsSVGIcon;
+use oneplugin\onepluginmedia\OnePluginMedia;
+use oneplugin\onepluginmedia\helpers\EvalMath;
+use oneplugin\onepluginmedia\elements\SVGIconPack;
+use oneplugin\onepluginmedia\helpers\StringHelper;
+use oneplugin\onepluginmedia\records\OnePluginMediaSVGIcon;
 
 class SvgIconsController extends Controller
 {
@@ -30,7 +30,7 @@ class SvgIconsController extends Controller
 
     public function init():void
     {
-        $this->plugin = OnePluginFields::$plugin;
+        $this->plugin = OnePluginMedia::$plugin;
         parent::init();
     }
 
@@ -40,11 +40,11 @@ class SvgIconsController extends Controller
         $settings = $this->plugin->getSettings();
 
         $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
-            '@oneplugin/onepluginfields/assetbundles/onepluginfields/dist',
+            '@oneplugin/onepluginmedia/assetbundles/onepluginmedia/dist',
             true
         );
 
-        return $this->renderTemplate('one-plugin-fields/svgicons/index', array_merge(
+        return $this->renderTemplate('one-plugin-media/svgicons/index', array_merge(
                 [
                     'plugin' => $this->plugin,
                     'settings' => $settings
@@ -58,12 +58,12 @@ class SvgIconsController extends Controller
         $this->requireAdmin();
         $settings = $this->plugin->getSettings();
         $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
-            '@oneplugin/onepluginfields/assetbundles/onepluginfields/dist',
+            '@oneplugin/onepluginmedia/assetbundles/onepluginmedia/dist',
             true
         );
         
         Craft::$app->getView()->registerCssFile($baseAssetsUrl . '/css/svgicon.css');
-        return $this->renderTemplate('one-plugin-fields/svgicons/_new', array_merge(
+        return $this->renderTemplate('one-plugin-media/svgicons/_new', array_merge(
             [
                 'plugin' => $this->plugin,
                 'iconPack' => new SVGIconPack(),
@@ -126,7 +126,7 @@ class SvgIconsController extends Controller
         }
         else{
             $transaction->commit();
-            Craft::$app->getSession()->setNotice(Craft::t('one-plugin-fields', 'SVG Icon Pack added successfully.'));
+            Craft::$app->getSession()->setNotice(Craft::t('one-plugin-media', 'SVG Icon Pack added successfully.'));
             $json = [
                 'success' => true,
             ];
@@ -140,13 +140,13 @@ class SvgIconsController extends Controller
         $this->requireAdmin();
         $settings = $this->plugin->getSettings();
         $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
-            '@oneplugin/onepluginfields/assetbundles/onepluginfields/dist',
+            '@oneplugin/onepluginmedia/assetbundles/onepluginmedia/dist',
             true
         );
         
         Craft::$app->getView()->registerCssFile($baseAssetsUrl . '/css/svgicon.css');
         $svgIconPack = SVGIconPack::findOne($iconPackId);
-        $icons = OnePluginFieldsSVGIcon::find()->where(['category' => $svgIconPack->category])->all();
+        $icons = OnePluginMediaSVGIcon::find()->where(['category' => $svgIconPack->category])->all();
         $m = new EvalMath;
         foreach ($icons as $icon) {
             $svg = $icon->data;
@@ -160,7 +160,7 @@ class SvgIconsController extends Controller
             }
             $icon->data = $svg;
         }
-        return $this->renderTemplate('one-plugin-fields/svgicons/_edit', array_merge(
+        return $this->renderTemplate('one-plugin-media/svgicons/_edit', array_merge(
             [
                 'plugin' => $this->plugin,
                 'iconPack' => $svgIconPack,

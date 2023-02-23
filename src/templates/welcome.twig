@@ -1,10 +1,10 @@
 {% extends "_layouts/cp" %}
-{% set title = 'Welcome to OnePlugin Fields!' %}
+{% set title = 'Welcome to OnePlugin Media!' %}
 {% set crumbs = [
-    { label: "OnePlugin Fields", url: url('one-plugin-fields') },
-    { label: "Welcome"|t, url: url('one-plugin-fields/welcome') },
+    { label: "OnePlugin Media", url: url('one-plugin-media') },
+    { label: "Welcome"|t, url: url('one-plugin-media/welcome') },
 ] %}
-{% set assetsFolder = craft.app.getAssetManager().getPublishedUrl('@oneplugin/onepluginfields/assetbundles/onepluginfields/dist',true) %}
+{% set assetsFolder = craft.app.getAssetManager().getPublishedUrl('@oneplugin/onepluginmedia/assetbundles/onepluginmedia/dist',true) %}
 {% block content %}
 <div class="pane" style="text-align: center;">
     <one-plugin style="margin-bottom:60px;width:50vh;height:50vh;" stroke="20" colors="primary:#030e12,secondary:#5bccf6" trigger="loop" src="https://s3.ap-southeast-2.amazonaws.com/production.oneplugin.co/logo.json"></one-plugin>
@@ -27,7 +27,7 @@
     depends: 'craft\\web\\assets\\cp\\CpAsset',
     position:3
 }) }}
-    {{ view.registerJsFile(assetsFolder ~ '/js/onepluginfields-lottie.min.js',{
+    {{ view.registerJsFile(assetsFolder ~ '/js/onepluginmedia-lottie.min.js',{
     depends: 'craft\\web\\assets\\cp\\CpAsset',
     position:3
 }) }}

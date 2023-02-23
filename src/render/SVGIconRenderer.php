@@ -1,27 +1,26 @@
 <?php
 
 /**
- * OnePlugin Fields plugin for Craft CMS 3.x
+ * OnePlugin Media plugin for Craft CMS 3.x
  *
- * OnePlugin Fields lets the Craft community embed rich contents on their website
+ * OnePlugin Media lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-
-namespace oneplugin\onepluginfields\render;
+namespace oneplugin\onepluginmedia\render;
 
 use Craft;
 use DOMDocument;
-use oneplugin\onepluginfields\OnePluginFields;
-use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
+use oneplugin\onepluginmedia\OnePluginMedia;
+use oneplugin\onepluginmedia\models\OnePluginMediaAsset;
 
 class SVGIconRenderer extends BaseRenderer
 {
-    public function render(OnePluginFieldsAsset $asset, array $options): array{
+    public function render(OnePluginMediaAsset $asset, array $options): array{
         
-        $plugin = OnePluginFields::$plugin;
+        $plugin = OnePluginMedia::$plugin;
         $doc = new DOMDocument();
         $doc->formatOutput = true;
         $doc->preserveWhiteSpace = false;
@@ -46,7 +45,7 @@ class SVGIconRenderer extends BaseRenderer
             return [$this->htmlFromDOMAfterAddingProperties($doc,$svg,$attributes), true];
         }
         catch (\Exception $exception) {
-            Craft::info($exception->getMessage(), 'onepluginfields');
+            Craft::info($exception->getMessage(), 'onepluginmedia');
         }
         $renderer = new BaseRenderer();
         return $renderer->render($asset,$options);

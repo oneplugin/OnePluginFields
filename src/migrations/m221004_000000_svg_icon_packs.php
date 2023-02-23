@@ -1,17 +1,20 @@
 <?php
 
 /**
- * OnePlugin Fields plugin for Craft CMS 3.x
+ * OnePlugin Media plugin for Craft CMS 3.x
  *
- * OnePlugin Fields lets the Craft community embed rich contents on their website
+ * OnePlugin Media lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginfields\migrations;
+namespace oneplugin\onepluginmedia\migrations;
 
 use craft\db\Migration;
+use craft\db\Query;
+use craft\db\Table;
+use craft\helpers\Json;
 
 class m221004_000000_svg_icon_packs extends Migration
 {
@@ -20,8 +23,8 @@ class m221004_000000_svg_icon_packs extends Migration
      */
     public function safeUp(): bool
     {
-        if (!$this->db->tableExists('{{%onepluginfields_svg_icon_packs}}')) {
-            $this->createTable('{{%onepluginfields_svg_icon_packs}}', [
+        if (!$this->db->tableExists('{{%onepluginmedia_svg_icon_packs}}')) {
+            $this->createTable('{{%onepluginmedia_svg_icon_packs}}', [
                 'id' => $this->primaryKey(),
                 'name' => $this->string(),
                 'handle' => $this->string(),
@@ -33,8 +36,8 @@ class m221004_000000_svg_icon_packs extends Migration
                 'uid' => $this->uid(),
             ]);
 
-            $this->createIndex(null, '{{%onepluginfields_svg_icon_packs}}', 'category', false);
-            $this->addForeignKey(null, '{{%onepluginfields_svg_icon_packs}}', ['category'], '{{%onepluginfields_category}}', ['id'], 'CASCADE', null);
+            $this->createIndex(null, '{{%onepluginmedia_svg_icon_packs}}', 'category', false);
+            $this->addForeignKey(null, '{{%onepluginmedia_svg_icon_packs}}', ['category'], '{{%onepluginmedia_category}}', ['id'], 'CASCADE', null);
         }
 
         return true;
@@ -45,7 +48,7 @@ class m221004_000000_svg_icon_packs extends Migration
      */
     public function safeDown(): bool
     {
-        $this->dropTableIfExists('{{%onepluginfields_svg_icon_packs}}');
+        $this->dropTableIfExists('{{%onepluginmedia_svg_icon_packs}}');
         return true;
     }
 }

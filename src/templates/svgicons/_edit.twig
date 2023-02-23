@@ -1,27 +1,27 @@
 {% extends "_layouts/cp" %}
 {% import '_includes/forms' as forms %}
 
-{% set title = "Edit SVG Icon Pack"|t("one-plugin-fields") %}
+{% set title = "Edit SVG Icon Pack"|t("one-plugin-media") %}
 {% set selectedSubnavItem = 'svg-icon-packs' %}
 {% set crumbs = [
-    { label: settings.pluginName, url: url("one-plugin-fields") },
-    { label: "SVG Icon Packs"|t("one-plugin-fields"), url: url("one-plugin-fields/svg-icons") },
-    { label: iconPack.title, url: url("one-plugin-fields/svg-icons/edit/"~iconPack.id) },
+    { label: settings.pluginName, url: url("one-plugin-media") },
+    { label: "SVG Icon Packs"|t("one-plugin-media"), url: url("one-plugin-media/svg-icons") },
+    { label: iconPack.title, url: url("one-plugin-media/svg-icons/edit/"~iconPack.id) },
 ]
 %}
 
 {% block content %}
 
-    {{ actionInput('one-plugin-fields/svg-icons/save') }}
-    {{ redirectInput('one-plugin-fields/svg-icons') }}
+    {{ actionInput('one-plugin-media/svg-icons/save') }}
+    {{ redirectInput('one-plugin-media/svg-icons') }}
     {{ csrfInput() }}
 
     {{ forms.textField({
         size: "60",
         first: true,
         class: "code",
-        label: "Icon Pack Name"|t('one-plugin-fields'),
-        instructions: "What this icon pack is called"|t('one-plugin-fields'),
+        label: "Icon Pack Name"|t('one-plugin-media'),
+        instructions: "What this icon pack is called"|t('one-plugin-media'),
         id: "packName",
         name: "packName",
         required:true,

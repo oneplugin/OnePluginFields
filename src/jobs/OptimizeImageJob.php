@@ -1,26 +1,26 @@
 <?php
 
 /**
- * OnePlugin Fields plugin for Craft CMS 3.x
+ * OnePlugin Media plugin for Craft CMS 3.x
  *
- * OnePlugin Fields lets the Craft community embed rich contents on their website
+ * OnePlugin Media lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginfields\jobs;
+namespace oneplugin\onepluginmedia\jobs;
 
 use Craft;
 use Throwable;
 use craft\helpers\Image;
 use craft\queue\BaseJob;
 use craft\elements\Asset;
+use oneplugin\onepluginmedia\OnePluginMedia;
 use craft\imagetransforms\ImageTransformer;
-use oneplugin\onepluginfields\OnePluginFields;
 use craft\models\ImageTransform as AssetTransform;
-use oneplugin\onepluginfields\models\OnePluginFieldsOptimizedImage;
-use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageRecord;
+use oneplugin\onepluginmedia\models\OnePluginMediaOptimizedImage;
+use oneplugin\onepluginmedia\records\OnePluginMediaOptimizedImage as OnePluginMediaOptimizedImageRecord;
 
 class OptimizeImageJob extends BaseJob
 {
@@ -36,7 +36,7 @@ class OptimizeImageJob extends BaseJob
 
     public function getDescription(): string
     {
-        return Craft::t('one-plugin-fields', 'Generating Optimized images.');
+        return Craft::t('one-plugin-media', 'Generating Optimized images.');
     }
 
     public function execute($queue): void
@@ -45,7 +45,7 @@ class OptimizeImageJob extends BaseJob
 
         $asset = Craft::$app->getAssets()->getAssetById($this->assetId);
         if( $asset ){
-            $assets = OnePluginFieldsOptimizedImageRecord::find()->where(['assetId' => $this->assetId] )->all();
+            $assets = OnePluginMediaOptimizedImageRecord::find()->where(['assetId' => $this->assetId] )->all();
             if( count($assets) > 0 && !$this->force){
                 return;
             }
@@ -53,7 +53,7 @@ class OptimizeImageJob extends BaseJob
             $model = $this->generateOptimizedImage($asset, $this->force);
             $json = json_encode($model);
             Craft::$app->db->createCommand()
-                    ->upsert(OnePluginFieldsOptimizedImageRecord::tableName(), [
+                    ->upsert(OnePluginMediaOptimizedImageRecord::tableName(), [
                         'content' => $json,
                         'assetId' => $asset->getId()
                     ], true, [], true)
@@ -61,15 +61,15 @@ class OptimizeImageJob extends BaseJob
             
         }
         else{
-            OnePluginFieldsOptimizedImageRecord::find()->where(['assetId' => $this->assetId])->one()->delete();
+            OnePluginMediaOptimizedImageRecord::find()->where(['assetId' => $this->assetId])->one()->delete();
         }
     }
 
     private function generateOptimizedImage(Asset $asset, $force){
 
-        $settings = OnePluginFields::$plugin->getSettings();
+        $settings = OnePluginMedia::$plugin->getSettings();
         $imageAspect = $asset->width / $asset->height;
-        $model = new OnePluginFieldsOptimizedImage('');
+        $model = new OnePluginMediaOptimizedImage('');
 
         $inputFormat = $asset->extension;
         if( strtolower($inputFormat) == 'svg'){

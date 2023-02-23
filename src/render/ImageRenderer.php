@@ -1,30 +1,29 @@
 <?php
 
 /**
- * OnePlugin Fields plugin for Craft CMS 3.x
+ * OnePlugin Media plugin for Craft CMS 3.x
  *
- * OnePlugin Fields lets the Craft community embed rich contents on their website
+ * OnePlugin Media lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginfields\render;
+namespace oneplugin\onepluginmedia\render;
 
 use Craft;
 use DOMDocument;
-use oneplugin\onepluginfields\OnePluginFields;
-use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
-use oneplugin\onepluginfields\models\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageModel;
-use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageRecord;
-
+use oneplugin\onepluginmedia\OnePluginMedia;
+use oneplugin\onepluginmedia\models\OnePluginMediaAsset;
+use oneplugin\onepluginmedia\models\OnePluginMediaOptimizedImage as OnePluginMediaOptimizedImageModel;
+use oneplugin\onepluginmedia\records\OnePluginMediaOptimizedImage as OnePluginMediaOptimizedImageRecord;
 class ImageRenderer extends BaseRenderer
 {
 
 
-    public function render(OnePluginFieldsAsset $asset, array $options): array{
+    public function render(OnePluginMediaAsset $asset, array $options): array{
 
-        $settings = OnePluginFields::$plugin->getSettings();
+        $settings = OnePluginMedia::$plugin->getSettings();
         $attributes = $this->normalizeOptionsForSize($asset,$options);
         $html = '';
         $cache = false;
@@ -38,28 +37,28 @@ class ImageRenderer extends BaseRenderer
             return[$html, $cache];
         }
         catch (\Exception $exception) {
-            Craft::info($exception->getMessage(), 'onepluginfields');
+            Craft::info($exception->getMessage(), 'onepluginmedia');
         }
         
         $renderer = new BaseRenderer();
         return $renderer->render($asset,$options);
     }
     
-    private function getImgObject(OnePluginFieldsAsset $asset, $attributes): array
+    private function getImgObject(OnePluginMediaAsset $asset, $attributes): array
     {
         $cache = false;
         $srcset = '';
         $optimizedImages = null;
         try{
-            $assets = OnePluginFieldsOptimizedImageRecord::find()->where(['assetId' => $asset->iconData['id']])->all();
+            $assets = OnePluginMediaOptimizedImageRecord::find()->where(['assetId' => $asset->iconData['id']])->all();
             if( count($assets) > 0 && !empty($assets[0]['content'])){
-                $optimizedImages = new OnePluginFieldsOptimizedImageModel($assets[0]['content']);
+                $optimizedImages = new OnePluginMediaOptimizedImageModel($assets[0]['content']);
                 $srcset = $this->getSrcset($optimizedImages);
                 $cache = true; //cache if srcset is available
             }
             else{
                 if( isset($asset->iconData['id'])){
-                    OnePluginFields::$plugin->onePluginFieldsService->addImageOptimizeJob($asset->iconData['id'], true, false);
+                    OnePluginMedia::$plugin->onePluginMediaService->addImageOptimizeJob($asset->iconData['id'], true, false);
                 }
             }
             $doc = new DOMDocument();
@@ -82,27 +81,27 @@ class ImageRenderer extends BaseRenderer
             return [$this->htmlFromDOMAfterAddingProperties($doc,$image,$attributes),$cache]; ;
         }
         catch (\Exception $exception) {
-            Craft::info($exception->getMessage(), 'onepluginfields');
+            Craft::info($exception->getMessage(), 'onepluginmedia');
         }
         $renderer = new BaseRenderer();
         return $renderer->render($asset,$attributes);
     }
 
-    private function getPictureObject(OnePluginFieldsAsset $asset, $attributes): array
+    private function getPictureObject(OnePluginMediaAsset $asset, $attributes): array
     {
         $cache = false;
         $srcset = '';
         $optimizedImages = null;
         try{
-            $assets = OnePluginFieldsOptimizedImageRecord::find()->where(['assetId' => $asset->iconData['id']])->all();
+            $assets = OnePluginMediaOptimizedImageRecord::find()->where(['assetId' => $asset->iconData['id']])->all();
             if( count($assets) > 0 && !empty($assets[0]['content'])){
-                $optimizedImages = new OnePluginFieldsOptimizedImageModel($assets[0]['content']);
+                $optimizedImages = new OnePluginMediaOptimizedImageModel($assets[0]['content']);
                 $srcset = $this->getSrcset($optimizedImages);
                 $cache = true; //cache if srcset is available
             }
             else{
                 if( isset($asset->iconData['id'])){
-                    OnePluginFields::$plugin->onePluginFieldsService->addImageOptimizeJob($asset->iconData['id'], true, false);
+                    OnePluginMedia::$plugin->onePluginMediaService->addImageOptimizeJob($asset->iconData['id'], true, false);
                 }
             }
             $doc = new DOMDocument();
@@ -145,13 +144,13 @@ class ImageRenderer extends BaseRenderer
             return [$this->htmlFromDOMAfterAddingProperties($doc,$picture,$attributes),$cache]; ;
         }
         catch (\Exception $exception) {
-            Craft::info($exception->getMessage(), 'onepluginfields');
+            Craft::info($exception->getMessage(), 'onepluginmedia');
         }
         $renderer = new BaseRenderer();
         return $renderer->render($asset,$attributes);
     }
 
-    private function getSrcset(OnePluginFieldsOptimizedImageModel $optimizedImage): string
+    private function getSrcset(OnePluginMediaOptimizedImageModel $optimizedImage): string
     {
         $srcset = '';
         foreach ($optimizedImage->imageUrls as $key => $value) {
@@ -163,7 +162,7 @@ class ImageRenderer extends BaseRenderer
         return $srcset;
     }
 
-    private function getFallbackSrcset(OnePluginFieldsOptimizedImageModel $optimizedImage): string
+    private function getFallbackSrcset(OnePluginMediaOptimizedImageModel $optimizedImage): string
     {
         $srcset = '';
         foreach ($optimizedImage->fallbackImageUrls as $key => $value) {

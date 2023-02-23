@@ -1,20 +1,20 @@
-{% extends "one-plugin-fields/_layouts/settings" %}
+{% extends "one-plugin-media/_layouts/settings" %}
 {% set selectedSubnavItem = 'settings' %}
 {% import "_includes/forms" as forms %}
 
-{% set title = "General Settings"|t("one-plugin-fields") %}
+{% set title = "General Settings"|t("one-plugin-media") %}
 
 {% block content %}
 
-<input name="action" type="hidden" value="one-plugin-fields/settings/save-settings">
-    {{ redirectInput('one-plugin-fields/settings') }}
+<input name="action" type="hidden" value="one-plugin-media/settings/save-settings">
+    {{ redirectInput('one-plugin-media/settings') }}
     {{ csrfInput() }}
 
     {{ forms.textField({
         first: true,
         class: "code",
-        label: "Plugin Name"|t('one-plugin-fields'),
-        instructions: "Override the plugin name by specifying your own here."|t('one-plugin-fields'),
+        label: "Plugin Name"|t('one-plugin-media'),
+        instructions: "Override the plugin name by specifying your own here."|t('one-plugin-media'),
         id: "pluginName",
         name: "settings[pluginName]",
         value: settings.pluginName,
@@ -28,70 +28,15 @@
         <div class="preview"></div>
     </div>
     {{ forms.lightswitchField({
-        label: "Enable Caching"|t('one-plugin-fields'),
-        tip: "Enable this setting to cache output tags. (This will greatly improve the load time)"|t('one-plugin-fields'),
+        label: "Enable Caching"|t('one-plugin-media'),
+        tip: "Enable this setting to cache output tags. (This will greatly improve the load time)"|t('one-plugin-media'),
         id: 'enableCache',
         name: 'settings[enableCache]',
         toggle: 'settings-enableCache',
         on: settings.enableCache,
-        onLabel: "Enable."|t('one-plugin-fields')
+        onLabel: "Enable."|t('one-plugin-media')
     }) }}
 </div>
-    {{ forms.hidden({
-        name: "settings[primaryColor]",
-        id: 'animatedicon-primary',
-        value: settings.primaryColor
-    }) }}
-
-    {{ forms.hidden({
-        name: "settings[secondaryColor]",
-        id: 'animatedicon-secondary',
-        value: settings.secondaryColor
-    }) }}
-<div class="matrixblock">
-    <div class="titlebar" style="padding:5px 10px 5px 5px">
-        <div class="blocktype"><strong>Animated Icons - Default Colour Selection</strong><span class="info op-tooltip" style="vertical-align: middle !important;"><span class="tooltips">Select the colours that will be prepopulated when you add a new animated icon to your template.</span></span></div>
-        <div class="preview"></div>
-    </div>
-    {{ forms.textField({
-        label: 'Default Stroke Width(in %)',
-        id: 'animatedicon-stroke-width',
-        name: 'settings[strokeWidth]',
-        value: settings.strokeWidth,
-        min: 1,
-        max: 100,
-        size: 1,
-        type: 'number',
-        errors: settings.getErrors("strokeWidth"),
-        })
-    }}
-    <div class="field">
-        <div class="heading">
-            <label for="pluginName" id="pluginName-label">
-                
-            </label>
-        </div>
-        <div class="instructions" id="pluginName-instructions">
-            <p>
-                Default Primary Color <span class="info op-tooltip" style="vertical-align: middle !important;"><span class="tooltips">Select the default feature colour for animated icons, site wide.</span></span>
-            </p>
-        </div>
-        <div class="animatedicon-color">
-            <button id="primary-color" class="option" style="background-color: {{settings.primaryColor}};" type="button">
-            </button>
-        </div>
-        <div class="instructions" id="pluginName-instructions">
-            <p>
-                Default Secondary Color  <span class="info op-tooltip" style="vertical-align: middle !important;"><span class="tooltips">Select a supporting colour for animated icons, site wide.</span></span>
-            </p>
-        </div>
-        <div class="animatedicon-color">
-            <button id="secondary-color" class="option" style="background-color: {{settings.secondaryColor}};" type="button">
-            </button>
-        </div>
-    </div>
-</div>
-
 
 <div class="matrixblock">
     <div class="titlebar" style="padding:5px 10px 5px 5px">
@@ -135,13 +80,13 @@
     </div>
     
     {{ forms.lightswitchField({
-        label: "Allow Upscaling"|t('one-plugin-fields'),
-        tip: "Enable to allow image upscaling, increasing image size may cause the image to appear low quality."|t('one-plugin-fields'),
+        label: "Allow Upscaling"|t('one-plugin-media'),
+        tip: "Enable to allow image upscaling, increasing image size may cause the image to appear low quality."|t('one-plugin-media'),
         id: 'opUpscale',
         name: 'settings[opUpscale]',
         toggle: 'settings-opUpscale',
         on: settings.opUpscale,
-        onLabel: "Enable."|t('one-plugin-fields')
+        onLabel: "Enable."|t('one-plugin-media')
     }) }}
 
     {% set formatOptions = [
@@ -152,13 +97,13 @@
     ] %}
 
     {{ forms.selectField({
-        label: "Output File Type"|t('one-plugin-fields'),
+        label: "Output File Type"|t('one-plugin-media'),
         instructions: "",
         id: 'outputFormat',
         name: 'settings[opOutputFormat]',
         options: formatOptions,
         value: settings.opOutputFormat,
-        tip: "Select output file type to use for image optimization"|t('one-plugin-fields')
+        tip: "Select output file type to use for image optimization"|t('one-plugin-media')
     }) }}
 
     {% set tagOptions = [
@@ -167,35 +112,35 @@
     ] %}
 
     {{ forms.selectField({
-        label: "Output Tag"|t('one-plugin-fields'),
+        label: "Output Tag"|t('one-plugin-media'),
         instructions: "",
         id: 'opImageTag',
         name: 'settings[opImageTag]',
         options: tagOptions,
         value: settings.opImageTag,
-        tip: " Picture tag - Supports multiple image srcsets. Multiple image source sets (srcsets) will ensure images are displayed correctly by providing a set of jPEG images for older versions of Safari."|t('one-plugin-fields'),
+        tip: " Picture tag - Supports multiple image srcsets. Multiple image source sets (srcsets) will ensure images are displayed correctly by providing a set of jPEG images for older versions of Safari."|t('one-plugin-media'),
         warning:'Webp is not supported by older versions of Safari. So if you have selected Output File Type as Webp, you should select PICTURE'
     }) }}
     
     {{ forms.editableTableField({
-        label: "Profiles for Image Variants"|t('one-plugin-fields'),
+        label: "Profiles for Image Variants"|t('one-plugin-media'),
         instructions: "",
         id: 'profiles',
         name: 'settings[opImageVariants]',
-        tip: "Specify the media break points to be used for generating optimized images. Image height will be calculated based on the aspect ratio."|t('one-plugin-fields'),
+        tip: "Specify the media break points to be used for generating optimized images. Image height will be calculated based on the aspect ratio."|t('one-plugin-media'),
         cols: {
             
             opWidth: {
                 type: 'singleline',
-                heading: "Width (in pixels)"|t('one-plugin-fields'),
-                info: "Only specify the width of the generated output image and the height will be caculated based on the aspect ratio."|t('one-plugin-fields'),
-                placeholder: "Width of the generated output image"|t('one-plugin-fields'),
+                heading: "Width (in pixels)"|t('one-plugin-media'),
+                info: "Only specify the width of the generated output image and the height will be caculated based on the aspect ratio."|t('one-plugin-media'),
+                placeholder: "Width of the generated output image"|t('one-plugin-media'),
                 code: false
             },
             opQuality: {
                 type: 'singleline',
-                heading: "Quality (in percentage)"|t('one-plugin-fields'),
-                info: "Quality in percentage of the generated image"|t('one-plugin-fields'),
+                heading: "Quality (in percentage)"|t('one-plugin-media'),
+                info: "Quality in percentage of the generated image"|t('one-plugin-media'),
                 code: false
             },
         }|filter,
@@ -205,128 +150,14 @@
     }) }}
 </div>
 
-<div class="matrixblock">
-    <div class="titlebar" style="padding:5px 10px 5px 5px">
-            <div class="blocktype"><strong>Google Maps</strong></div>
-        </div>
-{{ forms.textField({
-        size: "120",
-        label: "",
-        instructions: "Google Maps Api Key",
-        id: "googlemaps-api-key",
-        name: "settings[mapsAPIKey]",
-        value: settings.mapsAPIKey,
-        autofocus: false,
-        errors: settings.getErrors("pluginName"),
-        tip:'For more information on how to get a Google Maps Api key <a href="https://docs.oneplugin.co/docs/embed-maps" class="go" rel="noopener" target="_blank">Click here</a>'
-}) }}
-
-</div>
-
 
 <script type="text/javascript">
     if (document.readyState === "interactive" || document.readyState === "complete") {
-        animatedIconsDOMLoaded();
+        domLoaded();
     } else {
-      document.addEventListener("DOMContentLoaded", animatedIconsDOMLoaded, true);
+      document.addEventListener("DOMContentLoaded", domLoaded, true);
     }
-    function animatedIconsDOMLoaded(){
-        $('#primary-color').spectrum({
-            color: "{{settings.primaryColor}}",
-            showInput: true,
-            className: "full-spectrum",
-            showInitial: true,
-            showPalette: true,
-            showSelectionPalette: true,
-            maxSelectionSize: 10,
-            preferredFormat: "hex6",
-            localStorageKey: "spectrum.demo",
-            clickoutFiresChange: false,
-            chooseText: "Apply",
-            cancelText: "",
-            move: function (color) {
-
-            },
-            show: function () {
-
-            },
-            beforeShow: function () {
-
-            },
-            hide: function () {
-
-            },
-            change: function(color) {
-                $('#animatedicon-primary').val(color.toHexString());
-                $('#primary-color').css('background-color',color.toHexString());
-            },
-            colorChange: function(color){
-                
-            },
-            palette: [
-                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-                    "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-                    "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"],
-                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
-                    "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
-                    "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
-                    "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
-                    "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
-                    "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-                    "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-                    ]
-            ]
-        });
-
-        $('#secondary-color').spectrum({
-            color: "{{settings.secondaryColor}}",
-            showInput: true,
-            className: "full-spectrum",
-            showInitial: true,
-            showPalette: true,
-            showSelectionPalette: true,
-            maxSelectionSize: 10,
-            preferredFormat: "hex6",
-            localStorageKey: "spectrum.demo",
-            clickoutFiresChange: false,
-            chooseText: "Apply",
-            cancelText: "",
-            move: function (color) {
-
-            },
-            show: function () {
-
-            },
-            beforeShow: function () {
-
-            },
-            hide: function () {
-
-            },
-            change: function(color) {
-                $('#animatedicon-secondary').val(color.toHexString());
-                $('#secondary-color').css('background-color',color.toHexString());
-                
-            },
-            colorChange: function(color){
-                
-            },
-            palette: [
-                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-                    "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-                    "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"],
-                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
-                    "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
-                    "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
-                    "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
-                    "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
-                    "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-                    "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-                    ]
-            ]
-        });
+    function domLoaded(){
 
         $('#svg-stroke-color').spectrum({
             color: "{{settings.svgStrokeColor}}",

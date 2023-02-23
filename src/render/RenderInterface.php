@@ -1,27 +1,27 @@
 <?php
 
 /**
- * OnePlugin Fields plugin for Craft CMS 3.x
+ * OnePlugin Media plugin for Craft CMS 3.x
  *
- * OnePlugin Fields lets the Craft community embed rich contents on their website
+ * OnePlugin Media lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginfields\render;
+namespace oneplugin\onepluginmedia\render;
 
-use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
+use oneplugin\onepluginmedia\models\OnePluginMediaAsset;
 
 interface RenderInterface
 {
     /**
      * Return an HTML string for the corresponding content type
      *
-     * @param OnePluginFieldsAsset              $asset
+     * @param OnePluginMediaAsset              $asset
      * @param array               $options
      *
      * @return string
      */
-    public function render(OnePluginFieldsAsset $asset, array $options): array;
+    public function render(OnePluginMediaAsset $asset, array $options): array;
 }

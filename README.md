@@ -1,10 +1,10 @@
-# OnePluginFields plugin for Craft CMS 3.x
+# OnePluginMedia plugin for Craft CMS 3.x
 
-OnePluginFields lets the Craft community embed rich contents on their website
+OnePluginMedia lets the Craft community embed rich contents on their website
 
 ![LOGO](resources/img/logo.svg)
 
-**Note**: The license fee for this plugin is $229.00 via the Craft Plugin Store.
+**Note**: The license fee for this plugin is free via the Craft Plugin Store.
 
 ## Requirements
 
@@ -20,57 +20,40 @@ To install the plugin, follow these instructions.
 
 2. Then tell Composer to load the plugin:
 
-        composer require oneplugin/one-plugin-fields
+        composer require oneplugin/one-plugin-media
 
-3. Install the plugin via `./craft plugin/install one-plugin-fields` via the CLI, or in the Control Panel, go to Settings → Plugins and click the “Install” button for OnePlugin Fields.
+3. Install the plugin via `./craft plugin/install one-plugin-media` via the CLI, or in the Control Panel, go to Settings → Plugins and click the “Install” button for OnePlugin Media.
 
-You can also install OnePlugin Fields via the **Plugin Store** in the Craft Control Panel.
+You can also install OnePlugin Media via the **Plugin Store** in the Craft Control Panel.
 
-OnePlugin Fields works on Craft 4.x.
+OnePlugin Media works on Craft 3.x.
 
 
-## OnePluginFields Overview
+## OnePluginMedia Overview
 
-With OnePlugin Fields and one line of code, gain immediate access to: a library of over 1500+ SVGs editable to suit your style guidelines and template requirements, 300+ and counting animated icons Embed and resize videos with a link, Google maps, with or without an API key, Read only embedded PDFs and PPTs. With a range of features that combines the value of multiple plugins, One Plugin is a content managers dream come true.
+With OnePlugin Media and one line of code, gain immediate access to: a library of over 1500+ SVGs editable to suit your style guidelines and template requirements. With a range of features that combines the value of multiple plugins, One Plugin is a content managers dream come true.
 
-OnePlugin supports 9 different media types and adding them to your website is super simple.
+OnePlugin supports different media types and adding them to your website is super simple.
 
-OnePlugin adds a custom FieldType to Craft CMS, called OnePlugin Fields. OnePlugin Fields work exactly like regular PlainText or Asset fields, except that they can be configured to render 9 content types including images, videos, animated icons and svgs to name a few.
+OnePlugin adds a custom FieldType to Craft CMS, called OnePlugin Media. OnePlugin Media work exactly like regular PlainText or Asset fields, except that they can be configured to render 2 content types, namely images and SVG icons.
 
-A good example use case for OnePlugin Fields is whenever you need a field that offers content managers the ability to add different type of attractive contents.
+A good example use case for OnePlugin Media is whenever you need a field that offers content managers the ability to add different type of attractive contents.
 
-OnePlugin Fields works both standalone and inside Matrix blocks.
+OnePlugin Media works both standalone and inside Matrix blocks.
 
 ## Features
 
 * Manage image files in Craft CMS 3.0 like you always have
 
-* Embed a video link from any source.
-
-* Embed Power Point, PDF, Excel or Word document.
-
-* Embed any Publicly Available Social Feed.
-
-* Select from over 300+ Animated Icons and growing ;).
-
-* Embed a web page or form directly into your site.
-
-* Feel like you need direction in your life? Don't get frustrated you want it you got it, Embedded Google Maps!
-
 * Select from 1500+ SVGs all under free license and provided just because we love you.
-
-* Ability to upload your own SVG icon packs.
 
 ## Documentation
 
-Click here -> [OnePlugin Fields Documentation](https://docs.oneplugin.co/docs/installation/)
+Click here -> [OnePlugin Media Documentation](https://docs.oneplugin.co/docs/installation/)
 
 
-## OnePluginFields Roadmap V2
+## OnePluginMedia Roadmap V2
 
-* Add Animated icon Packs
 * Add More SVG packs
-* Embed Simple Forms
-* Add option for admins to import free animated icons and SVG icons
 
-Brought to you by [OnePlugin Fields](https://oneplugin.co/)
+Brought to you by [OnePlugin Media](https://oneplugin.co/)

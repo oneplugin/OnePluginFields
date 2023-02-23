@@ -1,29 +1,29 @@
 <?php
 
 /**
- * OnePlugin Fields plugin for Craft CMS 3.x
+ * OnePlugin Media plugin for Craft CMS 3.x
  *
- * OnePlugin Fields lets the Craft community embed rich contents on their website
+ * OnePlugin Media lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginfields\records;
+namespace oneplugin\onepluginmedia\records;
 
 use craft\db\ActiveRecord;
 
-class OnePluginFieldsVersion extends ActiveRecord
+class OnePluginMediaVersion extends ActiveRecord
 {
 
     public static function tableName()
     {
-        return '{{%onepluginfields_config}}';
+        return '{{%onepluginmedia_config}}';
     }
 
     public static function latest_version()
     {
-        $version = OnePluginFieldsVersion::find()
+        $version = OnePluginMediaVersion::find()
                 ->where(['id' => 1])->limit(1)
                 ->all();
         if (count($version) > 0 ) {

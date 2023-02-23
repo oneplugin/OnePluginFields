@@ -1,35 +1,36 @@
 <?php
 
 /**
- * OnePlugin Fields plugin for Craft CMS 3.x
+ * OnePlugin Media plugin for Craft CMS 3.x
  *
- * OnePlugin Fields lets the Craft community embed rich contents on their website
+ * OnePlugin Media lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginfields\jobs;
+
+namespace oneplugin\onepluginmedia\jobs;
 
 use Craft;
 use craft\queue\BaseJob;
-use oneplugin\onepluginfields\OnePluginFields;
-use oneplugin\onepluginfields\records\OnePluginFieldsVersion;
+use oneplugin\onepluginmedia\OnePluginMedia;
+use oneplugin\onepluginmedia\records\OnePluginMediaVersion;
 
 class ContentSyncJob extends BaseJob
 {
 
     public function execute($queue)
     {
-        $settings = OnePluginFields::$plugin->getSettings();
+        $settings = OnePluginMedia::$plugin->getSettings();
         if( $settings->newContentPackAvailable ){
             $this->addJob();
             return;
         }
-        $version = OnePluginFieldsVersion::latest_version();
-        $response = OnePluginFields::$plugin->onePluginFieldsService->checkForUpdates($version);
+        $version = OnePluginMediaVersion::latest_version();
+        $response = OnePluginMedia::$plugin->onePluginMediaService->checkForUpdates($version);
         if( $response['updates'] ){
-            Craft::$app->plugins->savePluginSettings(OnePluginFields::$plugin, ['newContentPackAvailable'=>true]);
+            Craft::$app->plugins->savePluginSettings(OnePluginMedia::$plugin, ['newContentPackAvailable'=>true]);
         }
         $this->addJob();
     }
@@ -42,7 +43,7 @@ class ContentSyncJob extends BaseJob
                         ->delay(6 * 60 * 60)
                         ->ttr(300)
                         ->push(new ContentSyncJob([
-            'description' => Craft::t('one-plugin-fields', 'OnePlugin Fields - Job for checking availability of new content packs')
+            'description' => Craft::t('one-plugin-media', 'OnePlugin Media - Job for checking availability of new content packs')
         ]));
     }
 }

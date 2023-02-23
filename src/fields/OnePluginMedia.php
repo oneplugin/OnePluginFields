@@ -1,15 +1,15 @@
 <?php
 
 /**
- * OnePlugin Fields plugin for Craft CMS 3.x
+ * OnePlugin Media plugin for Craft CMS 3.x
  *
- * OnePlugin Fields lets the Craft community embed rich contents on their website
+ * OnePlugin Media lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginfields\fields;
+namespace oneplugin\onepluginmedia\fields;
 
 use Craft;
 
@@ -18,20 +18,21 @@ use craft\base\Field;
 use craft\helpers\Json;
 use craft\base\ElementInterface;
 use craft\web\assets\cp\CpAsset;
-use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
-use oneplugin\onepluginfields\gql\types\OnePluginFieldGqlType;
-use oneplugin\onepluginfields\OnePluginFields as OnePluginFieldsPlugin;
+use oneplugin\onepluginmedia\models\OnePluginMediaAsset;
+use oneplugin\onepluginmedia\gql\types\OnePluginMediaGqlType;
+use oneplugin\onepluginmedia\OnePluginMedia as OnePluginMediaPlugin;
 
-class OnePluginFields extends Field
+class OnePluginMedia extends Field
 {
     public $mandatory = false;
+
+    /** @var array */
     public $allowedContents = '*';
     public $allowedSources = '*';
-
     
     public static function displayName(): string
     {
-        return Craft::t('one-plugin-fields', 'OnePlugin Field');
+        return Craft::t('one-plugin-media', 'OnePlugin Media');
     }
 
     public function rules(): array
@@ -63,7 +64,7 @@ class OnePluginFields extends Field
         {
             return null;
         }
-        if ($value instanceof OnePluginFieldsAsset)
+        if ($value instanceof OnePluginMediaAsset)
         {
             return $value;
         }
@@ -78,7 +79,7 @@ class OnePluginFields extends Field
         // if we have actual data return model
         if (count($valueData) > 0)
         {
-            return new OnePluginFieldsAsset($value);
+            return new OnePluginMediaAsset($value);
         }
         else{
             return null;
@@ -89,7 +90,7 @@ class OnePluginFields extends Field
     public function serializeValue($value, ElementInterface $element = null): mixed
     {
 
-        if ($value instanceof OnePluginFieldsAsset)
+        if ($value instanceof OnePluginMediaAsset)
         {
             $value = $value->json;
         }
@@ -99,7 +100,7 @@ class OnePluginFields extends Field
     public function getSettingsHtml():string
     {  
         return Craft::$app->getView()->renderTemplate(
-            'one-plugin-fields/_components/fields/_settings',
+            'one-plugin-media/_components/fields/_settings',
             [
                 'field' => $this,
                 'availableContents' => $this->availableContent(),
@@ -111,36 +112,30 @@ class OnePluginFields extends Field
     
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $settings = OnePluginFieldsPlugin::$plugin->getSettings();
+        $settings = OnePluginMediaPlugin::$plugin->getSettings();
         
         $folder = 'dist';
-        if( OnePluginFieldsPlugin::$devMode ){
+        if( OnePluginMediaPlugin::$devMode ){
             $folder = 'src';
         }
         $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
-            '@oneplugin/onepluginfields/assetbundles/onepluginfields/' . $folder,
+            '@oneplugin/onepluginmedia/assetbundles/onepluginmedia/' . $folder,
             true
         );
         $cssFiles = [];
         $jsFiles = [];
 
-        if( OnePluginFieldsPlugin::$devMode ){
-            $cssFiles = [$baseAssetsUrl . '/css/onepluginfields.css',$baseAssetsUrl . '/themes/default/style.css'];
-            $jsFiles = [ $baseAssetsUrl . '/js/icons/lottie_svg.js',$baseAssetsUrl . '/js/icons/onepluginfields-lottie.js',$baseAssetsUrl . '/js/onepluginfields.js',$baseAssetsUrl . '/js/spectrum.min.js',$baseAssetsUrl . '/js/jstree.js',$baseAssetsUrl . '/js/selectric.min.js'];
+        if( OnePluginMediaPlugin::$devMode ){
+            $cssFiles = [$baseAssetsUrl . '/css/onepluginmedia.css',$baseAssetsUrl . '/themes/default/style.css'];
+            $jsFiles = [ $baseAssetsUrl . '/js/icons/lottie_svg.js',$baseAssetsUrl . '/js/icons/onepluginmedia-lottie.js',$baseAssetsUrl . '/js/onepluginmedia.js',$baseAssetsUrl . '/js/spectrum.min.js',$baseAssetsUrl . '/js/jstree.js',$baseAssetsUrl . '/js/selectric.min.js'];
         }
         else{
-            $cssFiles = [$baseAssetsUrl . '/css/onepluginfields.min.css',$baseAssetsUrl . '/themes/default/style.min.css'];
-            $jsFiles = [$baseAssetsUrl . '/js/onepluginfields-cp.min.js'];
+            $cssFiles = [$baseAssetsUrl . '/css/onepluginmedia.min.css',$baseAssetsUrl . '/themes/default/style.min.css'];
+            $jsFiles = [$baseAssetsUrl . '/js/onepluginmedia-cp.min.js'];
         }
-        
-        $dynamicMaps =  false;
         
         foreach ($cssFiles as $cssFile) {
             Craft::$app->getView()->registerCssFile($cssFile);
-        }
-        if( !empty($settings->mapsAPIKey) ){
-            $dynamicMaps = true;
-            Craft::$app->getView()->registerJsFile('https://maps.googleapis.com/maps/api/js?key=' . $settings->mapsAPIKey . '&libraries=places&v=3.exp',['depends' => CpAsset::class]);
         }
         foreach ($jsFiles as $jsFile) {
             Craft::$app->getView()->registerJsFile($jsFile,['depends' => CpAsset::class]);
@@ -160,28 +155,22 @@ class OnePluginFields extends Field
         }
         $jsonVars = [
             'namespace' => $namespacedId,
-            //'volumes' => implode(',',$this->getAllVolumes()),
-            //'folders' => implode(',',$this->getAllFolders()),
-            'primary-color' => $settings->primaryColor,
-            'secondary-color' => $settings->secondaryColor,
-            'stroke-width' => $settings->strokeWidth,
             'svg-stroke-color' => $settings->svgStrokeColor,
             'svg-stroke-width' => $settings->svgStrokeWidth,
-            'allowedSources' => $allowedSources,
-            'dynamicMaps' => $dynamicMaps
+            'allowedSources' => $allowedSources
             ];
         $jsonVars = Json::encode($jsonVars);
-        Craft::$app->getView()->registerJs("new OnePluginFieldsSelectInput(" . $jsonVars . ");");
+        Craft::$app->getView()->registerJs("new OnePluginMediaSelectInput(" . $jsonVars . ");");
 
         // Render the input template
         $asset = null;
-        if( $value != null && ( $value->iconData['type'] == 'imageAsset' || $value->iconData['type'] == 'pdf' || $value->iconData['type'] == 'office') ){
+        if( $value != null && ( $value->iconData['type'] == 'imageAsset') ){
             if( isset($value->iconData['id']) && !empty($value->iconData['id'])){
                 $asset = Craft::$app->getAssets()->getAssetById($value->iconData['id']);
             }
         }
         return Craft::$app->getView()->renderTemplate(
-            'one-plugin-fields/_components/fields/_input',
+            'one-plugin-media/_components/fields/_input',
             [
                 'name' => $this->handle,
                 'fieldValue' => $value,
@@ -197,11 +186,11 @@ class OnePluginFields extends Field
 
     public function getContentGqlType(): \GraphQL\Type\Definition\Type|array
     {
-        $typeArray = OnePluginFieldGqlType::generateTypes($this);
+        $typeArray = OnePluginMediaGqlType::generateTypes($this);
 
         return [
             'name' => $this->handle,
-            'description' => "OnepluginField field",
+            'description' => "OnepluginMedia field",
             'type' => array_shift($typeArray),
         ];
     }
@@ -210,14 +199,8 @@ class OnePluginFields extends Field
 
         return [['label' => 'All','value' =>'*'], 
                 ['label' => 'Images','value' =>'imageAsset'],
-                ['label' => 'Videos','value' =>'video'],
-                ['label' => 'Social Media Content','value' =>'social'],
-                ['label' => 'Websites','value' =>'website'],
-                ['label' => 'Google Maps','value' =>'map'],
-                ['label' => 'Animated Icons','value' =>'animatedIcons'],
                 ['label' => 'SVG Icons','value' =>'svg'],
-                ['label' => 'PDF Documents','value' =>'pdf'],
-                ['label' => 'Office Documents','value' =>'office']];
+                ];
     }
 
     private function availableSources(): array{

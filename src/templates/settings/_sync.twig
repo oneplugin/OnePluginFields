@@ -1,8 +1,8 @@
-{% extends "one-plugin-fields/_layouts/settings" %}
+{% extends "one-plugin-media/_layouts/settings" %}
 {% set selectedSubnavItem = 'content-sync' %}
 {% import "_includes/forms" as forms %}
 
-{% set title = "Content Sync "|t("one-plugin-fields") %}
+{% set title = "Content Sync "|t("one-plugin-media") %}
 
 {% block actionButton %}
 
@@ -25,7 +25,7 @@
     </div>
 
     <div style="margin-top:20px;">
-        <input id="check-for-update" class="btn dashed" type="button" value="Check for updates"> <span class="info op-tooltip" style="vertical-align: middle !important;"><span class="tooltips">Latest content updates can be downloaded without having to reinstall OnePlugin Fields. <p>If an update is available, Download now button will appear.</p></span></span>
+        <input id="check-for-update" class="btn dashed" type="button" value="Check for updates"> <span class="info op-tooltip" style="vertical-align: middle !important;"><span class="tooltips">Latest content updates can be downloaded without having to reinstall OnePlugin Media. <p>If an update is available, Download now button will appear.</p></span></span>
         </input>
     </div>
 
@@ -41,11 +41,11 @@
 {% set contentJS %}
 
     if (document.readyState === "interactive" || document.readyState === "complete") {
-        onePluginFieldsDOMLoaded();
+        onePluginMediaDOMLoaded();
     } else {
-        document.addEventListener("DOMContentLoaded", onePluginFieldsDOMLoaded, true);
+        document.addEventListener("DOMContentLoaded", onePluginMediaDOMLoaded, true);
     }
-    function onePluginFieldsDOMLoaded() {
+    function onePluginMediaDOMLoaded() {
         $('#check-for-update').click(function(){
             var _this = this;
             $(this).prop('disabled', true);
@@ -53,7 +53,7 @@
             $(this).val('');
             $.ajax({
                 type: "get",
-                url: Craft.getActionUrl('one-plugin-fields/settings/check-for-updates', { }),
+                url: Craft.getActionUrl('one-plugin-media/settings/check-for-updates', { }),
                 data: [],
                 success: function (response) {
                     $(_this).prop('disabled', false);
@@ -86,7 +86,7 @@
 
             $.ajax({
                 type: "get",
-                url: Craft.getActionUrl('one-plugin-fields/settings/download-files', { }),
+                url: Craft.getActionUrl('one-plugin-media/settings/download-files', { }),
                 data: [],
                 success: function (response) {
                     $(_this).removeClass('spinner');

@@ -1,22 +1,23 @@
 <?php
 
 /**
- * OnePlugin Fields plugin for Craft CMS 3.x
+ * OnePlugin Media plugin for Craft CMS 3.x
  *
- * OnePlugin Fields lets the Craft community embed rich contents on their website
+ * OnePlugin Media lets the Craft community embed rich contents on their website
  *
  * @link      https://github.com/oneplugin
  * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-namespace oneplugin\onepluginfields\gql\models;
+namespace oneplugin\onepluginmedia\gql\models;
 
 use craft\base\Model;
 use craft\gql\TypeLoader;
 use craft\gql\base\GqlTypeTrait;
 use craft\gql\GqlEntityRegistry;
 use GraphQL\Type\Definition\Type;
-use oneplugin\onepluginfields\gql\resolvers\OnePluginFieldResolver;
+use GraphQL\Type\Definition\ObjectType;
+use oneplugin\onepluginmedia\gql\resolvers\OnePluginMediaResolver;
 
 class SVGIconGql extends Model
 {
@@ -26,20 +27,20 @@ class SVGIconGql extends Model
 
     public static function getName($context = null): string
     {
-        return 'OnePluginFields_SVGIcon';
+        return 'OnePluginMedia_SVGIcon';
     }
 
     static public function getType(): Type
     {
       $typeName = self::getName();
       $type = GqlEntityRegistry::getEntity($typeName)
-        ?: GqlEntityRegistry::createEntity($typeName, new OnePluginFieldResolver([
+        ?: GqlEntityRegistry::createEntity($typeName, new OnePluginMediaResolver([
         'name'   => static::getName(),
         'fields' => self::class . '::getFieldDefinitions',
-        'description' => 'The interface implemented by OnePlugin Field SVG type.',
+        'description' => 'The interface implemented by OnepluginMedia SVG type.',
         ]));
 
-        TypeLoader::registerType(static::getName(), function () use ($type) {
+        TypeLoader::registerType($typeName, function () use ($type) {
           return $type;
         });
       
