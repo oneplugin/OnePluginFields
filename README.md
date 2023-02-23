@@ -4,11 +4,11 @@ OnePluginFields lets the Craft community embed rich contents on their website
 
 ![LOGO](resources/img/logo.svg)
 
-**Note**: The license fee for this plugin is $229.00 via the Craft Plugin Store.
+**Note**: The license fee for this plugin is $99.00 via the Craft Plugin Store.
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.23 or later.
+This plugin requires Craft CMS 4.x or later.
 
 ## Installation
 
