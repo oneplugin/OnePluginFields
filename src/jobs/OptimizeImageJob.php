@@ -1,32 +1,26 @@
 <?php
 
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://github.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\jobs;
 
 use Craft;
-use craft\base\ElementInterface;
-use craft\base\Field;
-use craft\console\Application as ConsoleApplication;
-use craft\db\Paginator;
-use craft\elements\Asset;
-use craft\elements\db\ElementQuery;
-use craft\helpers\App;
-use craft\queue\BaseJob;
-use craft\models\AssetTransform;
+use Throwable;
 use craft\helpers\Image;
-use Exception;
+use craft\queue\BaseJob;
+use craft\elements\Asset;
+use craft\imagetransforms\ImageTransformer;
 use oneplugin\onepluginfields\OnePluginFields;
-use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageRecord;
+use craft\models\ImageTransform as AssetTransform;
 use oneplugin\onepluginfields\models\OnePluginFieldsOptimizedImage;
-use oneplugin\onepluginfields\models\Settings;
+use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageRecord;
 
 class OptimizeImageJob extends BaseJob
 {
@@ -40,9 +34,14 @@ class OptimizeImageJob extends BaseJob
      */
     public $force;
 
-    public function execute($queue)
+    public function getDescription(): string
     {
-        Craft::$app->getTemplateCaches()->deleteCachesByElementType(Asset::class);
+        return Craft::t('one-plugin-fields', 'Generating Optimized images.');
+    }
+
+    public function execute($queue): void
+    {
+        Craft::$app->getElements()->invalidateCachesForElementType(Asset::class);
 
         $asset = Craft::$app->getAssets()->getAssetById($this->assetId);
         if( $asset ){
@@ -82,6 +81,10 @@ class OptimizeImageJob extends BaseJob
             $model->extension = 'svg';
             return $model;
         }
+
+        $generateTransformsBeforePageLoad = Craft::$app->getConfig()->getGeneral()->generateTransformsBeforePageLoad;
+        Craft::$app->getConfig()->getGeneral()->generateTransformsBeforePageLoad = true;
+        
         $outputFormat = '';
         if( $settings->opOutputFormat == 'same'){
             $outputFormat = $inputFormat;
@@ -102,13 +105,15 @@ class OptimizeImageJob extends BaseJob
                         $transform->height = $opHeight;
                         $transform->interlace = 'line'; //for progressive jpgs
 
-                        $transforms = Craft::$app->getAssetTransforms();
+                        $transforms = Craft::createObject(ImageTransformer::class);
                         $index = $transforms->getTransformIndex($asset, $transform);
                         $index->fileExists = 0;
                         $transforms->storeTransformIndexData($index);
-                        $volume = $asset->getVolume();
-                        $transformPath = $asset->folderPath . $transforms->getTransformSubpath($asset, $index);
-                        $volume->deleteFile($transformPath);
+                        try {
+                            $transforms->deleteImageTransformFile($asset, $index);
+                        } catch (Throwable $exception) {
+                        }
+                        //No need to delete the file as this is done by the ImgeTransformer
                     } 
                     catch (\Throwable $e) {
                         $message = 'Failed to delete transform: '.$e->getMessage();
@@ -156,8 +161,10 @@ class OptimizeImageJob extends BaseJob
             $model->extension = $outputFormat;
         }
         else{
+            Craft::$app->getConfig()->getGeneral()->generateTransformsBeforePageLoad = $generateTransformsBeforePageLoad;
             return null;
         }
+        Craft::$app->getConfig()->getGeneral()->generateTransformsBeforePageLoad = $generateTransformsBeforePageLoad;
         return $model;
     }
 
@@ -167,17 +174,17 @@ class OptimizeImageJob extends BaseJob
         $filesize = 0;
         $errors = '';
         try{
-            $assetService = Craft::$app->getAssets();
-            $url = $assetService->getAssetUrl($asset, $transform, true);
+            $url = $asset->getUrl($transform);
+            
             if( $url ){
                 
-                if( ini_get('allow_url_fopen') ) {
+                /*if( ini_get('allow_url_fopen') ) {
                     $headers = get_headers($url, true);
                     if( isset($headers['Content-Length']) ){
                         $filesize = $headers['Content-Length'];
                     }
-                } 
-                $image = ['url' => $url,'width'=>$transform->width,'height'=>$transform->height,'size'=>$filesize];
+                }*/
+                $image = ['url' => $url,'width'=>$transform->width,'height'=>$transform->height,'filesize'=>$filesize];
             }
         }
         catch(\Throwable $e) {

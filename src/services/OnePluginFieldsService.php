@@ -1,45 +1,32 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\services;
 
-use oneplugin\onepluginfields\OnePluginFields;
 use Craft;
-use craft\base\Component;
-use craft\helpers\App;
-use craft\helpers\Template;
-use Embed\Adapters\Adapter;
-use Embed\Embed;
 use DOMDocument;
+use Embed\Embed;
+use craft\helpers\App;
 use GuzzleHttp\Client;
-use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageRecord;
-use oneplugin\onepluginfields\records\OnePluginFieldsCategory;
-use oneplugin\onepluginfields\records\OnePluginFieldsSVGIcon;
-use oneplugin\onepluginfields\records\OnePluginFieldsAnimatedIcon;
-use oneplugin\onepluginfields\records\OnePluginFieldsVersion;
-use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage;
+use craft\base\Component;
+use Embed\Adapters\Adapter;
+use oneplugin\onepluginfields\OnePluginFields;
 use oneplugin\onepluginfields\jobs\OptimizeImageJob;
+use oneplugin\onepluginfields\records\OnePluginFieldsSVGIcon;
+use oneplugin\onepluginfields\records\OnePluginFieldsVersion;
+use oneplugin\onepluginfields\records\OnePluginFieldsCategory;
+use oneplugin\onepluginfields\records\OnePluginFieldsAnimatedIcon;
+use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage;
+use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageRecord;
 
-/**
- * OnePluginFieldsService Service
- *
- * All of your plugin’s business logic should go in services, including saving data,
- * retrieving data, etc. They provide APIs that your controllers, template variables,
- * and other plugins can interact with.
- *
- * https://craftcms.com/docs/plugins/services
- *
- * @author    Jagadeesh Vijayakumar
- * @package   OnePluginFields
- * @since     1.0.0
- */
 class OnePluginFieldsService extends Component
 {
     const SERVER_URL = 'https://dev.oneplugin.co';
@@ -53,7 +40,6 @@ class OnePluginFieldsService extends Component
         try {
             array_multisort($options);
 
-            /** @var Adapter $media */
             $media = Embed::create($url, $options);
 
             if (!empty($media) && !isset($media->code)) {
@@ -71,7 +57,6 @@ class OnePluginFieldsService extends Component
                 };
             }
 
-            // Wrapping to be safe :)
             try {
                 $html = $media->code;
                 $dom = new DOMDocument;
@@ -79,7 +64,6 @@ class OnePluginFieldsService extends Component
 
                 $iframe = $dom->getElementsByTagName('iframe')->item(0);
                 $src = $iframe->getAttribute('src');
-                //$src = $this->manageGDPR($src);
 
                 if (!empty($options['params'])) {
                     foreach ((array)$options['params'] as $key => $value) {
@@ -162,12 +146,9 @@ class OnePluginFieldsService extends Component
 
     public function addImageOptimizeJob($assetId, $force,$runQueue = false){
 
-        //TODO - check whether same job exists
         $assets = OnePluginFieldsOptimizedImageRecord::find()->where(['assetId' => $assetId])->all();
-        if( count($assets) > 0 ){
-            return;
-        }
-        if($force){ //Make sure the content is cleared
+        
+        if($force){
             Craft::$app->db->createCommand()
                     ->upsert(OnePluginFieldsOptimizedImage::tableName(), [
                         'content' => '',

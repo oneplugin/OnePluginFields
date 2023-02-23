@@ -1,24 +1,23 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\render;
 
-use DOMDocument;
-use DOMElement;
-use DOMXPath;
 use Craft;
+use DOMDocument;
+use craft\web\View;
 use craft\helpers\UrlHelper;
 use oneplugin\onepluginfields\OnePluginFields;
 use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
 use oneplugin\onepluginfields\records\OnePluginFieldsAnimatedIcon;
-
 
 class AnimatedIconRenderer extends BaseRenderer
 {
@@ -48,7 +47,7 @@ class AnimatedIconRenderer extends BaseRenderer
             $trigger = $asset->iconData['asset']['icon-trigger'];
             $icon_name = $asset->iconData['asset']['icon-name'];
             $icon_name .= '_' . $trigger;
-            if( $settings->aIconDataAsHtml ){
+            if( $settings->aIconDataAsHtml ){ //Hidden in Settings now and value set to true
                 $icons = OnePluginFieldsAnimatedIcon::find()
                     ->where(['name' => $name])
                     ->all();
@@ -62,7 +61,7 @@ class AnimatedIconRenderer extends BaseRenderer
                 }
                 $this->setAttribute($doc,$aIcon,'icon',$icon_name);
                 if( !empty($icon) ){
-                    $aIcon->appendChild($doc->createCDATASection('<div style="display:none">' . $icon . '</div>'));
+                    $aIcon->appendChild($doc->createCDATASection('<data style="display:none">' . $icon . '</data>'));
                 }
                 else{
                     $this->setAttribute($doc,$aIcon,'src',$url); //fallback, in case :)
@@ -71,6 +70,7 @@ class AnimatedIconRenderer extends BaseRenderer
             else{
                 $this->setAttribute($doc,$aIcon,'src',$url);
             }
+            $this->includeAssets();
             return [$this->htmlFromDOMAfterAddingProperties($doc,$aIcon,$attributes), true];
         }
         catch (\Exception $exception) {
@@ -79,4 +79,30 @@ class AnimatedIconRenderer extends BaseRenderer
         $renderer = new BaseRenderer();
         return $renderer->render($asset,$options);
     }
+
+    public function includeAssets()
+    {
+        $folder = 'dist';
+         if( OnePluginFields::$devMode ){
+            $folder = 'src';
+        }
+        $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
+            '@oneplugin/onepluginfields/assetbundles/onepluginfields/' . $folder,
+            true
+        );
+
+        $jsFiles = [];
+        $jsFiles[] = $baseAssetsUrl . '/js/jquery.min.js';
+
+        if( OnePluginFields::$devMode ){
+            $jsFiles = array_merge($jsFiles,[ $baseAssetsUrl . '/js/icons/lottie_svg.js',$baseAssetsUrl . '/js/icons/onepluginfields-lottie.js']);
+        }
+        else{
+            $jsFiles = array_merge($jsFiles,[ $baseAssetsUrl . '/js/onepluginfields-lottie.min.js']);
+        }
+        foreach ($jsFiles as $jsFile) {
+            Craft::$app->getView()->registerJsFile($jsFile,['position' => View::POS_END,'defer' => true],hash('ripemd160',$jsFile) );
+        }
+    }
 }
+

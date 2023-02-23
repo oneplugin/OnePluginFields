@@ -1,6 +1,6 @@
 {% import "_includes/forms" as forms %}
 {% macro bytesToSize(bytes) %}
-{% spaceless %}
+{% apply spaceless %}
     {% set kilobyte = 1024 %}
     {% set megabyte = kilobyte * 1024 %}
     {% set gigabyte = megabyte * 1024 %}
@@ -17,7 +17,7 @@
     {% else %}
         {{ (bytes / terabyte)|number_format(2, '.') ~ ' TiB' }}
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endmacro %}
 {% from _self import bytesToSize %}
 
@@ -73,7 +73,7 @@
                                 </div>
                                 <div style="text-align: left; padding-bottom: 20px;">
                                     <span style="text-transform: uppercase; color: #888888">
-                                        {{derivation.width}} x {{derivation.height}} pxs | {{derivations.extension}} | {{bytesToSize(derivation.size)}}
+                                        {{derivation.width}} x {{derivation.height}} pxs | {{derivations.extension}} 
                                     </span>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                 <!-- SIDEBAR -->
 
     <div style="padding:20px;flex:1;position: relative;display: block !important;top: auto;right: auto !important;left: auto !important;height: 100%;box-shadow: none;">
-        {{ asset.getSidebarHtml | raw }}
+        {{ asset.getSidebarHtml(false) | raw }}
     </div>
                 
 </div>

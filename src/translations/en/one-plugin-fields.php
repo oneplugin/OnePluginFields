@@ -1,25 +1,14 @@
 <?php
-/**
- * OnePluginFields plugin for Craft CMS 3.x
- *
- * OnePluginFields lets the Craft community embed rich contents on their website
- *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
- */
 
 /**
- * OnePluginFields en Translation
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * Returns an array with the string to be translated (as passed to `Craft::t('one-plugin-fields', '...')`) as
- * the key, and the translation as the value.
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * http://www.yiiframework.com/doc-2.0/guide-tutorial-i18n.html
- *
- * @author    Jagadeesh Vijayakumar
- * @package   OnePluginFields
- * @since     1.0.0
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
+
 return [
     'OnePluginFields plugin loaded' => 'OnePluginFields plugin loaded',
     'This field is required' => 'This field is required',

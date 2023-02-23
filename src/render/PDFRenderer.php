@@ -1,20 +1,19 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\render;
 
-use DOMDocument;
-use DOMElement;
-use DOMXPath;
 use Craft;
-use craft\helpers\UrlHelper;
+use DOMDocument;
+use craft\web\View;
 use oneplugin\onepluginfields\OnePluginFields;
 use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
 
@@ -110,6 +109,7 @@ class PDFRenderer extends BaseRenderer
                 $doc->appendChild($div);
             }
             $html = $doc->saveHTML();
+            $this->includeAssets();
             return [$html,true];
         }
         catch (\Exception $exception) {
@@ -127,5 +127,32 @@ class PDFRenderer extends BaseRenderer
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    public function includeAssets()
+    {
+        $folder = 'dist';
+        if( OnePluginFields::$devMode ){
+            $folder = 'src';
+        }
+        $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
+            '@oneplugin/onepluginfields/assetbundles/onepluginfields/' . $folder,
+            true
+        );
+
+        $jsFiles = [];
+        $jsFiles[] = $baseAssetsUrl . '/js/jquery.min.js';
+        if( OnePluginFields::$devMode ){
+            $jsFiles[] = $baseAssetsUrl . '/js/pdf/pdf.js';
+            $jsFiles[] = $baseAssetsUrl . '/js/pdf/pdf.embed.js';
+            $jsFiles[] = $baseAssetsUrl . '/js/pdf/pdf.worker.js';
+        }
+        else{
+            $jsFiles[] = $baseAssetsUrl . '/js/pdf.min.js';
+        }
+
+        foreach ($jsFiles as $jsFile) {
+            Craft::$app->getView()->registerJsFile($jsFile,['position' => View::POS_END,'defer' => true],hash('ripemd160',$jsFile) );
+        }
     }
 }

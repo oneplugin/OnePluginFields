@@ -1,34 +1,18 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\models;
 
-use oneplugin\onepluginfields\OnePluginFields;
-
-use Craft;
 use craft\base\Model;
 
-/**
- * OnePluginFields Settings Model
- *
- * This is a model used to define the plugin's settings.
- *
- * Models are containers for data. Just about every time information is passed
- * between services, controllers, and templates in Craft, it’s passed via a model.
- *
- * https://craftcms.com/docs/plugins/models
- *
- * @author    Jagadeesh Vijayakumar
- * @package   OnePluginFields
- * @since     1.0.0
- */
 class Settings extends Model
 {
     // Public Properties
@@ -42,7 +26,9 @@ class Settings extends Model
     public $pluginName = 'OnePlugin Fields';
     public $primaryColor = '#545454';
     public $secondaryColor = '#66a1ee';
+    public $strokeWidth = 50;
     public $svgStrokeColor = '#66a1ee';
+    public $svgStrokeWidth = 50;
     public $opOutputFormat = 'webp';
     public $opImageVariants = [
             [
@@ -96,12 +82,15 @@ class Settings extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::defineRules();
 
-        $rules[] = [['pluginName', 'primaryColor', 'secondaryColor','svgStrokeColor'], 'required'];
+        $rules[] = [['pluginName', 'primaryColor', 'secondaryColor','svgStrokeColor','strokeWidth','svgStrokeWidth'], 'required'];
         $rules[] = [['pluginName'], 'string', 'max' => 52];
+        $rules[] = [['strokeWidth','svgStrokeWidth'], 'number', 'integerOnly' => true];
+        $rules[] = [['strokeWidth','svgStrokeWidth'], 'number', 'min' => 1];
+        $rules[] = [['strokeWidth','svgStrokeWidth'], 'number', 'max' => 100];
 
         return $rules;
     }

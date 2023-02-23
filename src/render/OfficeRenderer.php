@@ -1,21 +1,19 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\render;
 
-use DOMDocument;
-use DOMElement;
-use DOMXPath;
 use Craft;
-use craft\helpers\UrlHelper;
-use oneplugin\onepluginfields\OnePluginFields;
+use DOMDocument;
+use craft\helpers\Html;
 use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
 
 class OfficeRenderer extends BaseRenderer
@@ -28,6 +26,10 @@ class OfficeRenderer extends BaseRenderer
         $attributes = $this->normalizeOptionsForSize($asset,$options);
 
         try{
+            if( strpos(gethostname(), '.local') !== false ) { 
+                return [Html::tag('div', Craft::t('one-plugin-fields', 'Embedding Office documents will work only on servers with public access urls')),false];
+            }
+
             $url = 'https://view.officeapps.live.com/op/embed.aspx?src=' . $asset->iconData['asset'];
             $iframe = $doc->createElement('iframe');
             if( $attributes['size'] ){

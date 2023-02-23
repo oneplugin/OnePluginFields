@@ -37,3 +37,13 @@
     values: field.allowedContents,
     showAllOption: true,
 }) }}
+
+{{ forms.checkboxSelectField({
+    label: "Sources"|t('one-plugin-fields'),
+    instructions: "Which sources do you want to select image from?",
+    id: 'oneplugin-asset-sources',
+    name: 'allowedSources',
+    options: availableSources,
+    values: field.allowedSources,
+    showAllOption: true,
+}) }}

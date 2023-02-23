@@ -51,3 +51,9 @@ Highly recommend using a CDN like Cloudflare in conjunction with this setting.
 ### Fixed
 - SVG support is removed from Image Optimization
 - New jobs are not created for generating an optimized image if the metadata already exists
+
+## 1.1.0 - 2022-10-31
+
+- Craft 4 support
+- Ability to add icon packs.
+- JS libraries required to render animated icons are now added to the page automatically

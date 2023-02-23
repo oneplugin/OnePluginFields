@@ -1,27 +1,15 @@
 <?php
 
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://github.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
-
 namespace oneplugin\onepluginfields\models;
-
-use Craft;
-use craft\base\ElementInterface;
-use craft\base\Field;
-use craft\console\Application as ConsoleApplication;
-use craft\db\Paginator;
-use craft\elements\Asset;
-use craft\elements\db\ElementQuery;
-use craft\helpers\App;
-use craft\models\AssetTransform;
-use craft\helpers\Image;
 
 class OnePluginFieldsOptimizedImage{
 

@@ -1,19 +1,19 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
+
 
 namespace oneplugin\onepluginfields\render;
 
-use DOMDocument;
-use DOMElement;
-use DOMXPath;
 use Craft;
+use DOMDocument;
 use oneplugin\onepluginfields\OnePluginFields;
 use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
 

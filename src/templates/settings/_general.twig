@@ -50,9 +50,21 @@
     }) }}
 <div class="matrixblock">
     <div class="titlebar" style="padding:5px 10px 5px 5px">
-            <div class="blocktype"><strong>Animated Icons - Default Colour Selection</strong><span class="info op-tooltip" style="vertical-align: middle !important;"><span class="tooltips">Select the colours that will be prepopulated when you add a new animated icon to your template.</span></span></div>
-            <div class="preview"></div>
-        </div>
+        <div class="blocktype"><strong>Animated Icons - Default Colour Selection</strong><span class="info op-tooltip" style="vertical-align: middle !important;"><span class="tooltips">Select the colours that will be prepopulated when you add a new animated icon to your template.</span></span></div>
+        <div class="preview"></div>
+    </div>
+    {{ forms.textField({
+        label: 'Default Stroke Width(in %)',
+        id: 'animatedicon-stroke-width',
+        name: 'settings[strokeWidth]',
+        value: settings.strokeWidth,
+        min: 1,
+        max: 100,
+        size: 1,
+        type: 'number',
+        errors: settings.getErrors("strokeWidth"),
+        })
+    }}
     <div class="field">
         <div class="heading">
             <label for="pluginName" id="pluginName-label">
@@ -77,24 +89,26 @@
             <button id="secondary-color" class="option" style="background-color: {{settings.secondaryColor}};" type="button">
             </button>
         </div>
-
-        {{ forms.lightswitchField({
-        label: "Embed animated icons on page"|t('one-plugin-fields'),
-        tip: "When enabled, this setting embeds animated icons with the HTML page, increasing page load speed, and user experience"|t('one-plugin-fields'),
-        id: 'aIconDataAsHtml',
-        name: 'settings[aIconDataAsHtml]',
-        toggle: 'settings-aIconDataAsHtml',
-        on: settings.aIconDataAsHtml,
-        onLabel: "Enable."|t('one-plugin-fields')
-    }) }}
     </div>
 </div>
+
 
 <div class="matrixblock">
     <div class="titlebar" style="padding:5px 10px 5px 5px">
         <div class="blocktype"><strong>SVG Icons - Default Colour Selection</strong><span class="info op-tooltip" style="vertical-align: middle !important;"><span class="tooltips">Select the default colour to prepopulate when you add a new Simple Vector Graphic (SVG) to your template.</span></span></div>
         <div class="preview"></div>
     </div>
+    {{ forms.textField({
+        label: 'Default Stroke Width(in %)',
+        id: 'animatedicon-svg-stroke-width',
+        name: 'settings[svgStrokeWidth]',
+        value: settings.svgStrokeWidth,
+        min: 1,
+        max: 100,
+        size: 1,
+        type: 'number'
+        })
+    }}
     {{ forms.hidden({
         name: "settings[svgStrokeColor]",
         id: 'animatedicon-svg-color',

@@ -1,33 +1,36 @@
 <?php
 
+/**
+ * OnePlugin Fields plugin for Craft CMS 3.x
+ *
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
+ *
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
+ */
 
 namespace oneplugin\onepluginfields\controllers;
 
 use Craft;
-use craft\db\Query;
-use craft\db\Table;
-use craft\web\Controller;
 use yii\web\Response;
-use craft\helpers\App;
 use craft\db\Paginator;
+use craft\web\Controller;
 
 use oneplugin\onepluginfields\OnePluginFields;
-use oneplugin\onepluginfields\records\OnePluginFieldsCategory;
 use oneplugin\onepluginfields\records\OnePluginFieldsSVGIcon;
+use oneplugin\onepluginfields\records\OnePluginFieldsCategory;
 use oneplugin\onepluginfields\records\OnePluginFieldsAnimatedIcon;
 use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage;
-use oneplugin\onepluginfields\assetbundles\onepluginfields\OnePluginFields as OnePluginFieldsAsset;
-use oneplugin\onepluginfields\helpers\StringHelper;
 use oneplugin\onepluginfields\models\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageModel;
 
 class OnePluginController extends Controller
 {
 
     public $plugin;
-    protected $allowAnonymous = true;
+    protected array|bool|int $allowAnonymous = true;
     const QUERY_PAGE_SIZE = 30;
 
-    public function init()
+    public function init():void
     {
         $this->plugin = OnePluginFields::$plugin;
         parent::init();

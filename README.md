@@ -26,7 +26,7 @@ To install the plugin, follow these instructions.
 
 You can also install OnePlugin Fields via the **Plugin Store** in the Craft Control Panel.
 
-OnePlugin Fields works on Craft 3.x.
+OnePlugin Fields works on Craft 4.x.
 
 
 ## OnePluginFields Overview
@@ -58,6 +58,8 @@ OnePlugin Fields works both standalone and inside Matrix blocks.
 * Feel like you need direction in your life? Don't get frustrated you want it you got it, Embedded Google Maps!
 
 * Select from 1500+ SVGs all under free license and provided just because we love you.
+
+* Ability to upload your own SVG icon packs.
 
 ## Documentation
 

@@ -1,28 +1,32 @@
 <?php
 
+/**
+ * OnePlugin Fields plugin for Craft CMS 3.x
+ *
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
+ *
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
+ */
 
 namespace oneplugin\onepluginfields\controllers;
 
-use oneplugin\onepluginfields\fields\AnimatedIconsAssets;
-
 use Craft;
+
+use yii\web\Response;
 use craft\web\Controller;
-use craft\web\View;
-use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
 use oneplugin\onepluginfields\OnePluginFields;
 use oneplugin\onepluginfields\helpers\StringHelper;
 use oneplugin\onepluginfields\records\OnePluginFieldsVersion;
-use oneplugin\onepluginfields\services\OnePluginFieldsService;
-use yii\web\Response;
 
 class SettingsController extends Controller
 {
 
     public $plugin;
 
-    public function init()
+    public function init():void
     {
         $this->plugin = OnePluginFields::$plugin;
         parent::init();
@@ -30,6 +34,7 @@ class SettingsController extends Controller
 
     public function actionIndex(): Response
     {
+        $this->requireAdmin();
         $settings = $this->plugin->getSettings();
 
         $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(

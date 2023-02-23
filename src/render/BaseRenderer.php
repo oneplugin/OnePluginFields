@@ -1,18 +1,19 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\render;
 
-use DOMDocument;
-use DOMElement;
 use Craft;
+use DOMElement;
+use DOMDocument;
 use craft\helpers\Html;
 use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
 
@@ -26,12 +27,15 @@ class BaseRenderer implements RenderInterface
         return [Html::tag('div', Craft::t('one-plugin-fields', 'No renderer found for type ' . $asset->iconData['type'])),false];
     }
 
+    public function includeAssets(){
+        
+    }
     protected function normalizeOptionsForSize(OnePluginFieldsAsset $asset,array $options){
 
         $options['size'] = empty($options['size']) ? false : $options['size'];
         if( $options['size'] ){
             if (empty($options['width'])){
-                $options['width'] = $this->defaultSize[$asset->asset['type']]['width'];
+                $options['width'] = $this->defaultSize[$asset->iconData['type']]['width'];
             }
             if (empty($options['height'])){
                 $options['height'] = $this->defaultSize[$asset->iconData['type']]['height'];

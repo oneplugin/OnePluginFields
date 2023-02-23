@@ -1,44 +1,26 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\migrations;
 
-use oneplugin\onepluginfields\OnePluginFields;
-
 use Craft;
-use craft\config\DbConfig;
+
 use craft\db\Migration;
 use craft\helpers\Json;
-use craft\db\Query;
-use craft\queue\Queue;
-use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
+use oneplugin\onepluginfields\OnePluginFields;
 use oneplugin\onepluginfields\records\OnePluginFieldsSVGIcon;
-use oneplugin\onepluginfields\records\OnePluginFieldsAnimatedIcon;
-use oneplugin\onepluginfields\records\OnePluginFieldsCategory;
 use oneplugin\onepluginfields\records\OnePluginFieldsVersion;
+use oneplugin\onepluginfields\records\OnePluginFieldsCategory;
+use oneplugin\onepluginfields\records\OnePluginFieldsAnimatedIcon;
 
-use yii\db\Exception;
-/**
- * OnePluginFields Install Migration
- *
- * If your plugin needs to create any custom database tables when it gets installed,
- * create a migrations/ folder within your plugin folder, and save an Install.php file
- * within it using the following template:
- *
- * If you need to perform any additional actions on install/uninstall, override the
- * safeUp() and safeDown() methods.
- *
- * @author    Jagadeesh Vijayakumar
- * @package   OnePluginFields
- * @since     1.0.0
- */
 class Install extends Migration
 {
     // Public Properties
@@ -104,6 +86,7 @@ class Install extends Migration
      */
     protected function createTables()
     {
+        $this->dropTableIfExists('{{%onepluginfields_config}}');
         $this->createTable('{{%onepluginfields_config}}', [
             'id' => $this->primaryKey(),
             'content_version_number' => $this->string(256)->notNull(),
@@ -111,7 +94,7 @@ class Install extends Migration
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
         ]);
-
+        $this->dropTableIfExists('{{%onepluginfields_category}}');
         $this->createTable('{{%onepluginfields_category}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(256)->notNull(),
@@ -122,7 +105,7 @@ class Install extends Migration
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull()
         ]);
-
+        $this->dropTableIfExists('{{%onepluginfields_svg_icon}}');
         $this->createTable('{{%onepluginfields_svg_icon}}', [
             'id' => $this->primaryKey(),
             'category' => $this->integer()->notNull(),
@@ -135,7 +118,7 @@ class Install extends Migration
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull()
         ]);
-
+        $this->dropTableIfExists('{{%onepluginfields_animated_icon}}');
         $this->createTable('{{%onepluginfields_animated_icon}}', [
             'id' => $this->primaryKey(),
             'category' => $this->integer()->notNull(),
@@ -151,7 +134,7 @@ class Install extends Migration
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull()
         ]);
-
+        $this->dropTableIfExists('{{%onepluginfields_optimized_image}}');
         $this->createTable('{{%onepluginfields_optimized_image}}', [
             'id' => $this->primaryKey(),
             'assetId' => $this->integer()->notNull(),
@@ -159,6 +142,19 @@ class Install extends Migration
             'uid' => $this->uid(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull()
+        ]);
+
+        $this->dropTableIfExists('{{%onepluginfields_svg_icon_packs}}');
+        $this->createTable('{{%onepluginfields_svg_icon_packs}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(),
+            'handle' => $this->string(),
+            'category' => $this->integer()->notNull(),
+            'count' => $this->string()->notNull(),
+            'dateArchived' => $this->dateTime(),
+            'dateCreated' => $this->dateTime()->notNull(),
+            'dateUpdated' => $this->dateTime()->notNull(),
+            'uid' => $this->uid(),
         ]);
 
         return true;
@@ -177,14 +173,8 @@ class Install extends Migration
         $this->createIndex(null, '{{%onepluginfields_category}}', 'id', true);
         $this->createIndex(null, '{{%onepluginfields_optimized_image}}', 'id', true);
         $this->createIndex(null, '{{%onepluginfields_optimized_image}}', 'assetId', true);
+        $this->createIndex(null, '{{%onepluginfields_svg_icon_packs}}', 'category', false);
         
-        // Additional commands depending on the db driver
-        switch ($this->driver) {
-            case DbConfig::DRIVER_MYSQL:
-                break;
-            case DbConfig::DRIVER_PGSQL:
-                break;
-        }
     }
 
     /**
@@ -194,7 +184,9 @@ class Install extends Migration
      */
     protected function addForeignKeys()
     {
-        
+        $this->addForeignKey(null, '{{%onepluginfields_animated_icon}}', ['category'], '{{%onepluginfields_category}}', ['id'], 'CASCADE', null);
+        $this->addForeignKey(null, '{{%onepluginfields_svg_icon}}', ['category'], '{{%onepluginfields_category}}', ['id'], 'CASCADE', null);
+        $this->addForeignKey(null, '{{%onepluginfields_svg_icon_packs}}', ['category'], '{{%onepluginfields_category}}', ['id'], 'CASCADE', null);
     }
 
     /**
@@ -286,6 +278,7 @@ class Install extends Migration
     protected function removeTables()
     {
         $this->dropTableIfExists('{{%onepluginfields_config}}');
+        $this->dropTableIfExists('{{%onepluginfields_svg_icon_packs}}');        
         $this->dropTableIfExists('{{%onepluginfields_animated_icon}}');
         $this->dropTableIfExists('{{%onepluginfields_svg_icon}}');
         $this->dropTableIfExists('{{%onepluginfields_category}}');

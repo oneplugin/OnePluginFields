@@ -1,19 +1,19 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\render;
 
-use DOMDocument;
-use DOMElement;
-use DOMXPath;
 use Craft;
+use DOMDocument;
+use craft\web\View;
 use oneplugin\onepluginfields\OnePluginFields;
 use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
 
@@ -72,6 +72,7 @@ class GoogleMapsRenderer extends BaseRenderer
                 empty($attributes['class']) ? $this->setAttribute($doc,$div,'class','onepluginfields-gmap'):$this->setAttribute($doc,$div,'class','onepluginfields-gmap ' . $attributes['class']);
                 $element = $div;
             }
+            $this->includeAssets();
             return [$this->htmlFromDOMAfterAddingProperties($doc,$element,$attributes), true];
         }
         catch (\Exception $exception) {
@@ -79,5 +80,24 @@ class GoogleMapsRenderer extends BaseRenderer
         }
         $renderer = new BaseRenderer();
         return $renderer->render($asset,$options);
+    }
+
+    public function includeAssets()
+    {
+        $settings = OnePluginFields::$plugin->getSettings();
+        $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
+            '@oneplugin/onepluginfields/assetbundles/onepluginfields/dist/',
+            true
+        );
+
+        $jsFiles = [];
+        if( !empty($settings->mapsAPIKey) ){
+            $jsFiles[] = 'https://maps.googleapis.com/maps/api/js?key=' . $settings->mapsAPIKey . '&libraries=places&v=3.exp';
+            $jsFiles[] = $baseAssetsUrl . '/js/map/map.js';
+        }
+
+        foreach ($jsFiles as $jsFile) {
+            Craft::$app->getView()->registerJsFile($jsFile,['position' => View::POS_END,'defer' => true],hash('ripemd160',$jsFile) );
+        }
     }
 }

@@ -1,33 +1,32 @@
 <?php
 
+/**
+ * OnePlugin Fields plugin for Craft CMS 3.x
+ *
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
+ *
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
+ */
 
 namespace oneplugin\onepluginfields\models;
 
-use craft\helpers\ArrayHelper;
-use craft\helpers\StringHelper;
+use Craft;
 use craft\helpers\UrlHelper;
 use craft\helpers\Template as TemplateHelper;
-use oneplugin\onepluginfields\services\OnePluginFieldsService;
 use oneplugin\onepluginfields\OnePluginFields;
-use oneplugin\onepluginfields\records\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageRecord;
-use oneplugin\onepluginfields\render\RenderInterface;
+use oneplugin\onepluginfields\render\PDFRenderer;
+use oneplugin\onepluginfields\gql\models\ImageGql;
 use oneplugin\onepluginfields\render\BaseRenderer;
 use oneplugin\onepluginfields\render\ImageRenderer;
-use oneplugin\onepluginfields\render\RichContentRenderer;
-use oneplugin\onepluginfields\render\GoogleMapsRenderer;
-use oneplugin\onepluginfields\render\AnimatedIconRenderer;
-use oneplugin\onepluginfields\render\SVGIconRenderer;
-use oneplugin\onepluginfields\render\PDFRenderer;
+use oneplugin\onepluginfields\gql\models\SVGIconGql;
 use oneplugin\onepluginfields\render\OfficeRenderer;
-use DOMDocument;
-use DOMXPath;
-use Craft;
-use craft\elements\Asset;
-use craft\helpers\Component as ComponentHelper;
-use ether\seo\models\Settings;
-use ether\seo\Seo;
-use oneplugin\onepluginfields\models\OnePluginFieldsOptimizedImage as OnePluginFieldsOptimizedImageModel;
-use yii\base\BaseObject;
+use oneplugin\onepluginfields\render\RenderInterface;
+use oneplugin\onepluginfields\render\SVGIconRenderer;
+use oneplugin\onepluginfields\render\GoogleMapsRenderer;
+use oneplugin\onepluginfields\gql\models\AnimatedIconGql;
+use oneplugin\onepluginfields\render\RichContentRenderer;
+use oneplugin\onepluginfields\render\AnimatedIconRenderer;
 
 class OnePluginFieldsAsset
 {
@@ -65,9 +64,15 @@ class OnePluginFieldsAsset
 
     public function url()
     {
-        if( $this->iconData && ($this->iconData['type'] == 'imageAsset' || $this->iconData['type'] == 'video' || $this->iconData['type'] == 'social' || $this->iconData['type'] == 'website' || $this->iconData['type'] == 'office' || $this->iconData['type'] == 'pdf') )
+        if( $this->iconData && ( $this->iconData['type'] == 'video' || $this->iconData['type'] == 'social' || $this->iconData['type'] == 'website') ){
             return $this->iconData['asset'];
-
+        }
+        else if( $this->iconData && ($this->iconData['type'] == 'imageAsset' || $this->iconData['type'] == 'office' || $this->iconData['type'] == 'pdf')) {
+            $asset = Craft::$app->getAssets()->getAssetById($this->iconData['id']);
+            if( $asset ){
+                return $asset->getUrl();
+            }
+        }
         return "";
     }
 
@@ -83,6 +88,8 @@ class OnePluginFieldsAsset
         $settings = OnePluginFields::$plugin->getSettings();
         $hash = 'op_' . $settings->opSettingsHash . '_' . $settings->opImageTag . '_' . $settings->aIconDataAsHtml . md5($this->json . json_encode($options));
         if( $settings->enableCache && Craft::$app->cache->exists($hash)) {
+            $renderer = $this->createAssetRenderer();
+            $renderer->includeAssets();
             return TemplateHelper::raw(\Craft::$app->cache->get($hash));
         }
         $cache = true;
@@ -110,6 +117,96 @@ class OnePluginFieldsAsset
             }
         }
         return '';
+    }
+
+    public function getName() {
+        return 'OnepluginFields';
+    }
+
+    public function getType() {
+        return $this->iconData['type'];
+    }
+
+    public function getJsAssets() {
+        $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
+            '@oneplugin/onepluginfields/assetbundles/onepluginfields/dist',
+            true
+        );
+        $jsFiles = [];
+
+        if( $this->iconData['type'] == 'pdf'){
+            $jsFiles[] = $baseAssetsUrl . '/js/pdf.min.js';
+        }
+        else if( $this->iconData['type'] == 'animatedIcons'){
+            $jsFiles[] = $baseAssetsUrl . '/js/onepluginfields-lottie.min.js';
+        }
+        else if( $this->iconData['type'] == 'gmap'){
+            if( !empty($this->settings->mapsAPIKey)){
+                $jsFiles[] = 'https://maps.googleapis.com/maps/api/js?key=' . $settings->mapsAPIKey . '&libraries=places&v=3.exp';
+                $jsFiles[] = $baseAssetsUrl . '/js/map.min.js';
+            }
+        }
+        return $jsFiles;
+    }
+    
+    public function getTag($args) {
+        $opts = $args['options'] ?? [];
+        $options = array();
+        foreach ($opts as $opt) {
+            foreach ($opt as $key => $value) {
+                $options[$key] = $value;
+            }
+        }
+        return $this->render($options);
+    }
+
+    public function getImage() {
+        if( $this->iconData['type'] == 'imageAsset'){
+            //$imageAsset = Craft::$app->getAssets()->getAssetById($this->iconData['id']);
+            //return $imageAsset;
+            return new ImageGql($this->json);
+        }
+        return null;
+    }
+
+    public function getAnimatedIcon() {
+        if( $this->iconData['type'] == 'animatedIcons'){
+            return new AnimatedIconGql($this->json);
+        }
+        return null;
+    }
+
+    public function getSvgIcon() {
+        if( $this->iconData['type'] == 'svg'){
+            return new SVGIconGql($this->json);
+        }
+        return null;
+    }
+
+    public function getSrc()
+    {
+        switch( (string)$this->iconData['type'] ){
+            case 'imageAsset':
+                $imageAsset = Craft::$app->getAssets()->getAssetById($this->iconData['id']);
+                if( $imageAsset ){
+                    return $imageAsset->getUrl();
+                }
+                break;
+            case 'video':
+            case 'social':
+            case 'website':
+            case 'pdf':
+            case 'office':
+                return $this->iconData['asset'];
+            case 'gmap':
+                return '';
+            case 'animatedIcons':
+                $url = UrlHelper::actionUrl('one-plugin-fields/one-plugin/load/',[ 'name' => $this->iconData['asset']['icon-name'],'type' => 'aicon','trigger'=>$this->iconData['asset']['icon-trigger'] ] );
+                return $url;
+            case 'svg':
+                return '';
+            }
+        
     }
 
     private function createAssetRenderer(): RenderInterface
@@ -142,19 +239,7 @@ class OnePluginFieldsAsset
 
         return $options;
     }
-
-    private function getSrcset(OnePluginFieldsOptimizedImageModel $optimizedImage): string
-    {
-        $srcset = '';
-        foreach ($optimizedImage->imageUrls as $key => $value) {
-            if( !empty($value['url']) ){
-                $srcset .= $value['url'] . ' ' . $key . 'w, ';
-            }
-        }
-        $srcset = rtrim($srcset, ', ');
-        return $srcset;
-    }
-
+    
     private function setAttribute($doc, $elem, $name, $value){
         
         $attribute = $doc->createAttribute($name);
@@ -166,5 +251,4 @@ class OnePluginFieldsAsset
         $json = json_decode($value);
         return $json && $value != $json;
     }
-
 }

@@ -1,38 +1,25 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\variables;
 
-use oneplugin\onepluginfields\OnePluginFields;
 use Craft;
-use craft\helpers\Html;
-use craft\helpers\Json;
-use craft\helpers\Template as TemplateHelper;
 use craft\web\View;
-/**
- * OnePluginFields Variable
- *
- * Craft allows plugins to provide their own template variables, accessible from
- * the {{ craft }} global variable (e.g. {{ craft.onePluginFields }}).
- *
- * https://craftcms.com/docs/plugins/variables
- *
- * @author    Jagadeesh Vijayakumar
- * @package   OnePluginFields
- * @since     1.0.0
- */
+use craft\helpers\Template as TemplateHelper;
+use oneplugin\onepluginfields\OnePluginFields;
+
 class OnePluginFieldsVariable
 {
     // Public Methods
     // =========================================================================
-    const DEV_MODE = false;
 
     /**
      * @param bool $includeJQuery
@@ -46,7 +33,7 @@ class OnePluginFieldsVariable
         $settings = OnePluginFields::$plugin->getSettings();
 
         $folder = 'dist';
-        if( self::DEV_MODE ){
+        if( OnePluginFields::$devMode ){
             $folder = 'src';
         }
         $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
@@ -59,7 +46,7 @@ class OnePluginFieldsVariable
         if( $jquery ){
             $jsFiles[] = $baseAssetsUrl . '/js/jquery.min.js';
         }
-        if( self::DEV_MODE ){
+        if( OnePluginFields::$devMode ){
             $jsFiles = array_merge($jsFiles,[ $baseAssetsUrl . '/js/icons/lottie_svg.js',$baseAssetsUrl . '/js/icons/onepluginfields-lottie.js']);
             if( $pdfJS ){
                 $jsFiles[] = $baseAssetsUrl . '/js/pdf/pdf.js';
@@ -83,10 +70,10 @@ class OnePluginFieldsVariable
         }
 
         foreach ($cssFiles as $cssFile) {
-            Craft::$app->getView()->registerCssFile($cssFile,['position' => View::POS_END,'defer' => true]);
+            Craft::$app->getView()->registerCssFile($cssFile,['position' => View::POS_END,'defer' => true],hash('ripemd160',$cssFile));
         }
         foreach ($jsFiles as $jsFile) {
-            Craft::$app->getView()->registerJsFile($jsFile,['position' => View::POS_END,'defer' => true]);
+            Craft::$app->getView()->registerJsFile($jsFile,['position' => View::POS_END,'defer' => true],hash('ripemd160',$jsFile) );
         }
 
         return TemplateHelper::raw(implode(PHP_EOL,[]));

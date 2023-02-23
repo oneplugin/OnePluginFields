@@ -41,6 +41,12 @@
                     {% if '*' in allowedContents or 'imageAsset' in allowedContents %}
                         <option value="imageAsset">{{"Add Image"|t('one-plugin-fields')}}</option>
                     {% endif %}
+                    {% if '*' in allowedContents or 'animatedIcons' in allowedContents %}
+                        <option value="animatedIcons">{{"Add Animated Icon"|t('one-plugin-fields')}}</option>
+                    {% endif %}
+                    {% if '*' in allowedContents or 'svg' in allowedContents %}
+                        <option value="svg">{{"Add SVG Icon"|t('one-plugin-fields')}}</option>
+                    {% endif %}
                     {% if '*' in allowedContents or 'video' in allowedContents %}
                         <option value="video">{{"Embed Video"|t('one-plugin-fields')}}</option>
                     {% endif %}
@@ -52,12 +58,6 @@
                     {% endif %}
                     {% if '*' in allowedContents or 'map' in allowedContents %}
                         <option value="gmap">{{"Embed Google Map"|t('one-plugin-fields')}}</option>
-                    {% endif %}
-                    {% if '*' in allowedContents or 'animatedIcons' in allowedContents %}
-                        <option value="animatedIcons">{{"Add Animated Icon"|t('one-plugin-fields')}}</option>
-                    {% endif %}
-                    {% if '*' in allowedContents or 'svg' in allowedContents %}
-                        <option value="svg">{{"Add SVG Icon"|t('one-plugin-fields')}}</option>
                     {% endif %}
                     {% if '*' in allowedContents or 'pdf' in allowedContents %}
                         <option value="pdf">{{"Embed PDF Document"|t('one-plugin-fields')}}</option>

@@ -40,7 +40,7 @@
     
     <!-- SIDEBAR -->
     <div style="padding:20px;flex:1;position: relative;display: block !important;top: auto;right: auto !important;left: auto !important;height: 100%;box-shadow: none;">
-        {{ asset.getSidebarHtml | raw }}
+        {{ asset.getSidebarHtml(false) | raw }}
     </div>
 </div>
 

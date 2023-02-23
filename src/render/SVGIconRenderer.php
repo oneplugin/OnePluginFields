@@ -1,20 +1,19 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
+
 
 namespace oneplugin\onepluginfields\render;
 
-use DOMDocument;
-use DOMElement;
-use DOMXPath;
 use Craft;
-use craft\helpers\UrlHelper;
+use DOMDocument;
 use oneplugin\onepluginfields\OnePluginFields;
 use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
 
@@ -27,19 +26,23 @@ class SVGIconRenderer extends BaseRenderer
         $doc->formatOutput = true;
         $doc->preserveWhiteSpace = false;
         $attributes = $this->normalizeOptionsForSize($asset,$options);
+        $svg = null;
         try{
-            $svg = $doc->createElement('svg');
+            $doc->loadXML($asset->iconData['asset']['svg-data']);
+            if( $doc->getElementsByTagName('svg') && $doc->getElementsByTagName('svg')->length > 0){
+                $svg = $doc->getElementsByTagName('svg')->item(0);
+                if( $svg->getAttribute('width'))
+                    $svg->removeAttribute('width');
+                if( $svg->getAttribute('height'))
+                    $svg->removeAttribute('height');
+            }
+            else{
+                $svg = $doc->createElement('svg');
+            }
             empty($attributes['class']) ?:$this->setAttribute($doc,$svg,'class',$attributes['class']);
             if( $attributes['size'] ){
                 $this->setAttribute($doc,$svg,'style','width:'. $attributes["width"] . ';height:' . $attributes["height"] . ';');
             }
-            $this->setAttribute($doc,$svg,'stroke-width',$asset->iconData['asset']['icon-stroke-width']);
-            $this->setAttribute($doc,$svg,'stroke',$asset->iconData['asset']['icon-primary']);
-            $this->setAttribute($doc,$svg,'viewbox','0 0 24 24');
-            $this->setAttribute($doc,$svg,'fill','none');
-            $this->setAttribute($doc,$svg,'stroke-linecap','round');
-            $this->setAttribute($doc,$svg,'stroke-linejoin','round');
-            $svg->appendChild($doc->createCDATASection($asset->iconData['asset']['svg-data']));
             return [$this->htmlFromDOMAfterAddingProperties($doc,$svg,$attributes), true];
         }
         catch (\Exception $exception) {

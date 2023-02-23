@@ -1,58 +1,32 @@
 <?php
+
 /**
- * OnePluginFields plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * OnePluginFields lets the Craft community embed rich contents on their website
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      https://guthub.com/
- * @copyright Copyright (c) 2021 Jagadeesh Vijayakumar
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\fields;
 
+use Craft;
+
+use yii\db\Schema;
+use craft\base\Field;
+use craft\helpers\Json;
+use craft\base\ElementInterface;
+use craft\web\assets\cp\CpAsset;
+use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
+use oneplugin\onepluginfields\gql\types\OnePluginFieldGqlType;
 use oneplugin\onepluginfields\OnePluginFields as OnePluginFieldsPlugin;
 
-use Craft;
-use craft\base\ElementInterface;
-use craft\base\Field;
-use craft\helpers\Db;
-use yii\db\Schema;
-use craft\helpers\Json;
-use craft\errors\InvalidSubpathException;
-use craft\errors\InvalidVolumeException;
-use craft\fields\Assets;
-use craft\helpers\Html;
-use craft\web\assets\cp\CpAsset;
-use oneplugin\animatedicons\models\AnimatedIconData;
-use oneplugin\onepluginfields\models\OnePluginFieldsAsset;
-
-/**
- * OnePluginFieldsField Field
- *
- * Whenever someone creates a new field in Craft, they must specify what
- * type of field it is. The system comes with a handful of field types baked in,
- * and we’ve made it extremely easy for plugins to add new ones.
- *
- * https://craftcms.com/docs/plugins/field-types
- *
- * @author    Jagadeesh Vijayakumar
- * @package   OnePluginFields
- * @since     1.0.0
- */
 class OnePluginFields extends Field
 {
-    // Public Properties
-    // =========================================================================
-
     public $mandatory = false;
-
-    /** @var array */
     public $allowedContents = '*';
-
-    const DEV_MODE = false;
-
-    // Static Methods
-    // =========================================================================
+    public $allowedSources = '*';
 
     
     public static function displayName(): string
@@ -60,28 +34,12 @@ class OnePluginFields extends Field
         return Craft::t('one-plugin-fields', 'OnePlugin Field');
     }
 
-    // Public Methods
-    // =========================================================================
-
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
-        //$rules[] = [['mandatory'], 'required'];
-        //$rules[] = [['defaultWidth', 'defaultHeight'], 'number'];
         return $rules;
     }
 
-    /**
-     * Returns the column type that this field should get within the content table.
-     *
-     * This method will only be called if [[hasContentColumn()]] returns true.
-     *
-     * @return string The column type. [[\yii\db\QueryBuilder::getColumnType()]] will be called
-     * to convert the give column type to the physical one. For example, `string` will be converted
-     * as `varchar(255)` and `string(100)` becomes `varchar(100)`. `not null` will automatically be
-     * appended as well.
-     * @see \yii\db\QueryBuilder::getColumnType()
-     */
     public function getContentColumnType(): string
     {
         return Schema::TYPE_TEXT;
@@ -99,20 +57,7 @@ class OnePluginFields extends Field
         }
     }
     
-    /**
-     * Normalizes the field’s value for use.
-     *
-     * This method is called when the field’s value is first accessed from the element. For example, the first time
-     * `entry.myFieldHandle` is called from a template, or right before [[getInputHtml()]] is called. Whatever
-     * this method returns is what `entry.myFieldHandle` will likewise return, and what [[getInputHtml()]]’s and
-     * [[serializeValue()]]’s $value arguments will be set to.
-     *
-     * @param mixed                 $value   The raw field value
-     * @param ElementInterface|null $element The element the field is associated with, if there is one
-     *
-     * @return mixed The prepared field value
-     */
-    public function normalizeValue($value, ElementInterface $element = null)
+    public function normalizeValue($value, ElementInterface $element = null): mixed
     {
         if( $value ==  null)
         {
@@ -141,17 +86,7 @@ class OnePluginFields extends Field
         return $value;
     }
 
-    /**
-     * Prepares the field’s value to be stored somewhere, like the content table or JSON-encoded in an entry revision table.
-     *
-     * Data types that are JSON-encodable are safe (arrays, integers, strings, booleans, etc).
-     * Whatever this returns should be something [[normalizeValue()]] can handle.
-     *
-     * @param mixed $value The raw field value
-     * @param ElementInterface|null $element The element the field is associated with, if there is one
-     * @return mixed The serialized field value
-     */
-    public function serializeValue($value, ElementInterface $element = null)
+    public function serializeValue($value, ElementInterface $element = null): mixed
     {
 
         if ($value instanceof OnePluginFieldsAsset)
@@ -161,14 +96,14 @@ class OnePluginFields extends Field
         return parent::serializeValue($value, $element);
     }
 
-    public function getSettingsHtml()
+    public function getSettingsHtml():string
     {  
-        // Render the settings template
         return Craft::$app->getView()->renderTemplate(
-            'one-plugin-fields/_components/fields/OnePlugiFields_settings',
+            'one-plugin-fields/_components/fields/_settings',
             [
                 'field' => $this,
-                'availableContents' => $this->availableContent()
+                'availableContents' => $this->availableContent(),
+                'availableSources' => $this->availableSources()
             ]
         );
     }
@@ -179,7 +114,7 @@ class OnePluginFields extends Field
         $settings = OnePluginFieldsPlugin::$plugin->getSettings();
         
         $folder = 'dist';
-        if( self::DEV_MODE ){
+        if( OnePluginFieldsPlugin::$devMode ){
             $folder = 'src';
         }
         $baseAssetsUrl = Craft::$app->assetManager->getPublishedUrl(
@@ -189,7 +124,7 @@ class OnePluginFields extends Field
         $cssFiles = [];
         $jsFiles = [];
 
-        if( self::DEV_MODE ){
+        if( OnePluginFieldsPlugin::$devMode ){
             $cssFiles = [$baseAssetsUrl . '/css/onepluginfields.css',$baseAssetsUrl . '/themes/default/style.css'];
             $jsFiles = [ $baseAssetsUrl . '/js/icons/lottie_svg.js',$baseAssetsUrl . '/js/icons/onepluginfields-lottie.js',$baseAssetsUrl . '/js/onepluginfields.js',$baseAssetsUrl . '/js/spectrum.min.js',$baseAssetsUrl . '/js/jstree.js',$baseAssetsUrl . '/js/selectric.min.js'];
         }
@@ -217,19 +152,27 @@ class OnePluginFields extends Field
         $namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
         // Variables to pass down to our field JavaScript to let it namespace properly
+        $allowedContents = is_array($this->allowedContents) ? $this->allowedContents : [$this->allowedContents ];
+
+        $allowedSources = is_array($this->allowedSources) ? $this->allowedSources : [$this->allowedSources ];
+        if( sizeof( $allowedSources ) == 1 && ( empty($allowedSources[0]) || $allowedSources[0] == '*' ) ){
+            $allowedSources = '*';
+        }
         $jsonVars = [
             'namespace' => $namespacedId,
-            'volumes' => implode(',',$this->getAllVolumes()),
-            'folders' => implode(',',$this->getAllFolders()),
+            //'volumes' => implode(',',$this->getAllVolumes()),
+            //'folders' => implode(',',$this->getAllFolders()),
             'primary-color' => $settings->primaryColor,
             'secondary-color' => $settings->secondaryColor,
+            'stroke-width' => $settings->strokeWidth,
             'svg-stroke-color' => $settings->svgStrokeColor,
+            'svg-stroke-width' => $settings->svgStrokeWidth,
+            'allowedSources' => $allowedSources,
             'dynamicMaps' => $dynamicMaps
             ];
         $jsonVars = Json::encode($jsonVars);
         Craft::$app->getView()->registerJs("new OnePluginFieldsSelectInput(" . $jsonVars . ");");
 
-        $allowedContents = is_array($this->allowedContents) ? $this->allowedContents : [$this->allowedContents ];
         // Render the input template
         $asset = null;
         if( $value != null && ( $value->iconData['type'] == 'imageAsset' || $value->iconData['type'] == 'pdf' || $value->iconData['type'] == 'office') ){
@@ -238,7 +181,7 @@ class OnePluginFields extends Field
             }
         }
         return Craft::$app->getView()->renderTemplate(
-            'one-plugin-fields/_components/fields/OnePluginFields_input',
+            'one-plugin-fields/_components/fields/_input',
             [
                 'name' => $this->handle,
                 'fieldValue' => $value,
@@ -246,45 +189,21 @@ class OnePluginFields extends Field
                 'id' => $id,
                 'settings' => $settings,
                 'allowedContents' => $allowedContents,
+                'allowedSources' => $allowedSources,
                 'asset' => $asset
             ]
         );
     }
 
-    private function getAllVolumes(){
-        $allVolumes = [];
-        $volumes = Craft::$app->getVolumes();
-        $publicVolumes = $volumes->getPublicVolumes();
-        foreach ($publicVolumes as $volume){
-            $allVolumes[] = 'volumes:' . $volume->uid;
-        }
-
-        return $allVolumes;
-    }
-
-    private function getAllFolders(){
-        $allVolumes = [];
-        $volumes = Craft::$app->getVolumes();
-        $publicVolumes = $volumes->getPublicVolumes();
-        foreach ($publicVolumes as $volume){
-            $allVolumes[] = 'folder:' . $this->_volumeSourceToFolderSource($volume->uid);
-        }
-
-        return $allVolumes;
-    }
-
-    private function _volumeSourceToFolderSource($sourceKey): string
+    public function getContentGqlType(): \GraphQL\Type\Definition\Type|array
     {
-        if ($sourceKey && is_string($sourceKey) && strpos($sourceKey, 'volume:') === 0) {
-            $parts = explode(':', $sourceKey);
-            $volume = Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
+        $typeArray = OnePluginFieldGqlType::generateTypes($this);
 
-            if ($volume && $folder = Craft::$app->getAssets()->getRootFolderByVolumeId($volume->id)) {
-                return 'folder:' . $folder->uid;
-            }
-        }
-
-        return (string)$sourceKey;
+        return [
+            'name' => $this->handle,
+            'description' => "OnepluginField field",
+            'type' => array_shift($typeArray),
+        ];
     }
 
     private function availableContent(): array{
@@ -299,5 +218,23 @@ class OnePluginFields extends Field
                 ['label' => 'SVG Icons','value' =>'svg'],
                 ['label' => 'PDF Documents','value' =>'pdf'],
                 ['label' => 'Office Documents','value' =>'office']];
+    }
+
+    private function availableSources(): array{
+
+        $sources = Craft::$app->getElementSources()->getSources('craft\elements\Asset', 'modal');
+        $options = [];
+        $optionNames = [];
+        foreach ($sources as $source) {
+            if (!isset($source['heading'])) {
+                $options[] = [
+                    'label' => $source['label'],
+                    'value' => $source['key'],
+                ];
+                $optionNames[] = $source['label'];
+            }
+        }
+        array_multisort($optionNames, SORT_NATURAL | SORT_FLAG_CASE, $options);
+        return $options;
     }
 }

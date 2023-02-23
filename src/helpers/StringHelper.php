@@ -1,11 +1,12 @@
 <?php
+
 /**
- * Form Contact X plugin for Craft CMS 3.x
+ * OnePlugin Fields plugin for Craft CMS 3.x
  *
- * Contact Form X can manage multiple contact forms, plus you can customize the form and the mail contents flexibly with simple markup. Craft Cms Form Contact
+ * OnePlugin Fields lets the Craft community embed rich contents on their website
  *
- * @link      ducxinh.com
- * @copyright Copyright (c) 2020 Duc Xinh
+ * @link      https://github.com/oneplugin
+ * @copyright Copyright (c) 2022 The OnePlugin Team
  */
 
 namespace oneplugin\onepluginfields\helpers;
@@ -77,7 +78,9 @@ class StringHelper
         $stringParts = explode($delimiter, $string);
         $camelized = array_map('ucwords', $stringParts);
 
-        return implode($delimiter, $camelized);
+        $str = implode('', $camelized);
+        $str[0] = strtolower($str[0]);
+        return $str;
     }
 
     /**
